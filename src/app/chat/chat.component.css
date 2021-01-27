@@ -1,0 +1,64 @@
+.jumbotron {
+  margin-bottom: 0px;
+  border-radius: 0;
+}
+
+h1 {
+}
+
+label {
+
+}
+
+input,
+input:focus {
+  background: white;
+  border: none!important;
+
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #3d3d3d inset!important;
+  -webkit-text-fill-color: #f28e1c!important;
+}
+
+select {
+  background-color: #3d3d3d!important;
+  color: #f28e1c!important;
+  border: none!important;
+}
+
+.container {
+  position: relative;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+form button{;
+  padding: 12px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+form button:disabled{
+  cursor: not-allowed;
+  border: none;
+  background-color: rgba(96,96,96,0.20)
+}
+
+h6{
+  color: red;
+}
+
+input.ng-dirty.ng-invalid {
+  border: 1px solid red;
+}
+
+progressbar{
+  width: 300px;
+  margin-left: auto;
+  margin-right:auto;
+}

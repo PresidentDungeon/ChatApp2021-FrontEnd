@@ -1,0 +1,28 @@
+<div class="jumbotron">
+  <h1 align="center">Send Message</h1>
+  <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
+  <div class="container" *ngIf="!loading">
+
+    <h6 id="errorMsg" align="center">{{error}}</h6>
+
+    <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+      <div class="form-group">
+        <div class="col-sm-4 offset-sm-4">
+          <label for="message">Message</label>
+          <input type="text" class="form-control" formControlName="message" id="message" placeholder="Type message to send" minlength="0">
+        </div>
+
+        <div class="col-sm-8 offset-sm-4">
+          <h6 *ngIf="messageForm.get('message').invalid && messageForm.get('message').dirty">Message has to contain letters!</h6>
+        </div>
+      </div>
+
+      <div class="col text-center">
+        <button class="btn btn-success" type="submit" [disabled]="!messageForm.valid">Send Message</button>
+      </div>
+    </form>
+
+    <button class="btn btn-info">Go back</button>
+
+  </div>
+</div>
