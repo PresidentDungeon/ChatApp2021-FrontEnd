@@ -1,46 +1,65 @@
-<div class="jumbotron">
-  <h1 align="center">Send Message</h1>
-  <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
+ <div class="jumbotron">
 
-  <div class="container" *ngIf="!loading">
-    <h6 id="errorMsg" align="center">{{error}}</h6>
-  </div>
+    <h1 align="center">Send Message</h1>
+    <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
 
-    <div class="container" id="textArea">
-      <h4 *ngFor="let message of messages;">
-        Someone: {{message}}
-      </h4>
+    <div class="container" *ngIf="!loading">
+      <h6 id="errorMsg" align="center">{{error}}</h6>
     </div>
 
+    <div class="container main-content">
+      <div class="row">
+
+        <div class="col-md-10">
+
+          <div id="textArea">
+            <p *ngFor="let message of messages;">
+              Someone: {{message}}
+            </p>
+          </div>
+
+          <div>
+            <h5 *ngIf="typingUsers.length > 1">Several is typing...</h5>
+            <h5 *ngIf="typingUsers[0] && typingUsers.length <= 1"><b>{{typingUsers[0]}}</b> is typing...</h5>
+            <h5 *ngIf="typingUsers.length === 0" id="trans">-</h5>
+          </div>
+
+          <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
 
 
-  <div class="container">
-    <h5 *ngIf="typingUsers.length > 1">Several is typing...</h5>
-    <h5 *ngIf="typingUsers[0] && typingUsers.length <= 1"><b>{{typingUsers[0]}}</b> is typing...</h5>
-    <h5 *ngIf="typingUsers.length === 0" id="trans">-</h5>
-  </div>
+            <div class="form-group">
+              <div class="col-sm-4 offset-sm-4">
+                <input type="text" class="form-control" formControlName="message" id="message" placeholder="Type message to send" minlength="0" maxlength="300" autocomplete="off">
+              </div>
+            </div>
 
-  <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
-    <div class="form-group">
-      <div class="col-sm-4 offset-sm-4">
-        <input type="text" class="form-control" formControlName="message" id="message" placeholder="Type message to send" minlength="0">
+            <p class="col text-center" id="counter">{{(messageForm.get("message").value === null) ? 0 : messageForm.get("message").value.length}}/300</p>
+
+            <div class="col text-center">
+              <button class="btn btn-success" type="submit" [disabled]="!messageForm.valid">Send Message</button>
+            </div>
+          </form>
+
+          <button class="btn btn-info">Go back</button>
+
+        </div>
+
+        <div class="col-md-2" id="activeChatters">
+          <h6 align="center">Active chatters</h6>
+
+          <ul>
+            <li>
+              <p>Theodor mads</p>
+            </li>
+            <li>
+              <p>Theodor mads</p>
+            </li>
+            <li>
+              <p>aqua</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      
     </div>
+  </div>
 
-    <div class="col text-center">
-      <button class="btn btn-success" type="submit" [disabled]="!messageForm.valid">Send Message</button>
-    </div>
-  </form>
-
-  <button class="btn btn-info">Go back</button>
-
-
-
-
-
-
-
-
-
-</div>

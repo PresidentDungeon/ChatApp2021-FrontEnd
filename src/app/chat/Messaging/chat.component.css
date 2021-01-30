@@ -50,7 +50,7 @@ form button:disabled{
 }
 
 h6{
-  color: red;
+  color: black;
 }
 
 input.ng-dirty.ng-invalid {
@@ -69,8 +69,27 @@ progressbar{
   height: 400px;
   max-height: 400px;
   background-color: white;
+
+  word-wrap: break-word
 }
 
 #trans{
   color: transparent;
 }
+
+#activeChatters{
+  background-color: white;
+  color: #3d3d3d;
+}
+
+ul {
+  margin: 0px;
+  padding: 10px;
+}
+
+#counter{
+  margin-top: -10px;
+  margin-bottom: -0px;
+}
+
+

@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   }
 
   messageForm = new FormGroup({
-    message: new FormControl('', [Validators.required, Validators.minLength(0)]),
+    message: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),
   });
 
    loading: boolean = true;
@@ -66,8 +66,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   }
 
   ngOnDestroy(): void {
-    console.log("Destroy");
-    debugger;
     if(this.subscriptionChat){this.subscriptionChat.unsubscribe();}
     if(this.subscriptionTyping){this.subscriptionTyping.unsubscribe();}
     this.chatService.unregisterUser(this.chatService.username);
