@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 import { ChatRoutingModule } from './chat-routing.module';
-import { ChatComponent } from './chat.component';
+import { ChatComponent } from './Messaging/chat.component';
 import {ProgressbarModule} from 'ngx-bootstrap/progressbar';
+import { RegistrationComponent } from './Registration/registration/registration.component';
 
 
 @NgModule({
-  declarations: [ChatComponent],
+  declarations: [ChatComponent, RegistrationComponent],
   imports: [
     CommonModule,
     ChatRoutingModule,

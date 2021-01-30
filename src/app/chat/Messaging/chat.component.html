@@ -22,7 +22,24 @@
       </div>
     </form>
 
+
     <button class="btn btn-info">Go back</button>
 
+
+
+    <div class="contain" id="textArea">
+      <h4 *ngFor="let message of messages;">
+        Someone: {{message}}
+      </h4>
+    </div>
+
+
+
   </div>
+
+  <div class="container">
+    <h5 *ngIf="typingUsers.length > 1">Several is typing...</h5>
+    <h5 *ngIf="typingUsers[0] && typingUsers.length <= 1"><b>{{typingUsers[0]}}</b> is typing...</h5>
+  </div>
+
 </div>
