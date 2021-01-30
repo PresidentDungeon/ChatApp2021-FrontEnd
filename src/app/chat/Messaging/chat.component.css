@@ -68,4 +68,9 @@ progressbar{
   scroll-behavior: auto;
   height: 400px;
   max-height: 400px;
+  background-color: white;
+}
+
+#trans{
+  color: transparent;
 }
