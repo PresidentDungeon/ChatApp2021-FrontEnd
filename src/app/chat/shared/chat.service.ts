@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
-import {User} from './User';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +36,24 @@ export class ChatService {
     this.socket.emit('typing', {user: user, typing: typing});
   }
 
-  listenForTyping(): Observable<User[]>{
-    return this.socket.fromEvent<User[]>('typers');
+  listenForTyping(): Observable<string[]>{
+    return this.socket.fromEvent<string[]>('typers');
+  }
+
+  listenForRegister(): Observable<string>{
+    return this.socket.fromEvent<string>('userJoin');
+  }
+
+  listenForUnregister(): Observable<string>{
+    return this.socket.fromEvent<string>('userLeave');
+  }
+
+  handleUserRequest(): void{
+    this.socket.emit('requestUsers');
+  }
+
+  handleUserResponse(): Observable<string[]>{
+    return this.socket.fromEvent<string[]>('responseUsers');
   }
 
 }

@@ -26,9 +26,7 @@ export class RegistrationComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
 
     this.subscriptionRegister = this.chatService.registerResponse().subscribe((success) => {
-      console.log('response');
-      console.log(success);
-      if(success){this.chatService.username = this.username; this.router.navigate(['/chats']); console.log("nagivated?")}
+      if(success){this.chatService.username = this.username; this.router.navigate(['/chats']);}
       else{this.error = 'User with same username already registered in chat'}
       this.registerLoad = false;
     });

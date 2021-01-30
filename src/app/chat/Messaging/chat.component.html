@@ -18,14 +18,15 @@
             </p>
           </div>
 
-          <div>
-            <h5 *ngIf="typingUsers.length > 1">Several is typing...</h5>
-            <h5 *ngIf="typingUsers[0] && typingUsers.length <= 1"><b>{{typingUsers[0]}}</b> is typing...</h5>
-            <h5 *ngIf="typingUsers.length === 0" id="trans">-</h5>
+          <div *ngIf="typingUsers.length === 0">
+            <h5 id="trans">⠀</h5>
+          </div>
+
+          <div *ngIf="typingUsers.length > 0">
+            <h5 [innerHTML]="calculateTypingText()"></h5>
           </div>
 
           <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
-
 
             <div class="form-group">
               <div class="col-sm-4 offset-sm-4">
@@ -45,19 +46,14 @@
         </div>
 
         <div class="col-md-2" id="activeChatters">
-          <h6 align="center">Active chatters</h6>
+          <h6 align="center">Active chatters ({{connectedUsers.length}})</h6>
 
           <ul>
-            <li>
-              <p>Theodor mads</p>
-            </li>
-            <li>
-              <p>Theodor mads</p>
-            </li>
-            <li>
-              <p>aqua</p>
+            <li *ngFor="let user of connectedUsers">
+              <p>{{user}}</p>
             </li>
           </ul>
+
         </div>
       </div>
     </div>
