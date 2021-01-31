@@ -14,7 +14,7 @@
 
           <div id="textArea">
             <p *ngFor="let message of messages;">
-              Someone: {{message}}
+              {{message.user}}: {{message.message}}
             </p>
           </div>
 

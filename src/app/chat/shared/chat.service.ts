@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
+import {Message} from './message';
 
 @Injectable({
   providedIn: 'root'
@@ -12,32 +13,18 @@ export class ChatService {
   constructor(private socket: Socket) { }
 
 
+  //User handling
+
   registerUser(username: string): boolean{
     return this.socket.emit('register', username);
-  }
-
-  unregisterUser(username: string): boolean{
-    return this.socket.emit('unregister', username);
   }
 
   registerResponse(): Observable<boolean>{
     return this.socket.fromEvent<boolean>('registerResponse');
   }
 
-  sendMessage(message: string): void{
-    this.socket.emit('message', message);
-  }
-
-  listenForMessages(): Observable<string>{
-    return this.socket.fromEvent<string>('messages');
-  }
-
-  sendTypingStatus(user: string, typing: boolean): void{
-    this.socket.emit('typing', {user: user, typing: typing});
-  }
-
-  listenForTyping(): Observable<string[]>{
-    return this.socket.fromEvent<string[]>('typers');
+  unregisterUser(username: string): boolean{
+    return this.socket.emit('unregister', username);
   }
 
   listenForRegister(): Observable<string>{
@@ -55,5 +42,30 @@ export class ChatService {
   handleUserResponse(): Observable<string[]>{
     return this.socket.fromEvent<string[]>('responseUsers');
   }
+
+  //Message handling
+
+  sendMessage(message: Message): void{
+    this.socket.emit('message', message);
+  }
+
+  listenForMessages(): Observable<Message>{
+    return this.socket.fromEvent<Message>('messages');
+  }
+
+
+  //Typing status
+
+  sendTypingStatus(user: string, typing: boolean): void{
+    this.socket.emit('typing', {user: user, typing: typing});
+  }
+
+  listenForTyping(): Observable<string[]>{
+    return this.socket.fromEvent<string[]>('typers');
+  }
+
+
+
+
 
 }

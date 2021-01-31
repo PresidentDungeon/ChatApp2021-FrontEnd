@@ -10,6 +10,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ChatService} from '../shared/chat.service';
 import {Subscription} from 'rxjs';
 import {debounceTime, tap} from 'rxjs/operators';
+import {Message} from '../shared/message';
 
 @Component({
   selector: 'app-chat',
@@ -31,7 +32,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
    isTyping: boolean;
    shouldScroll: boolean;
 
-   messages: string[] = [];
+   messages: Message[] = [];
    typingUsers: string[] = [];
    connectedUsers: string[] = [];
 
@@ -93,7 +94,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
   sendMessage(): void{
     const messageData = this.messageForm.value;
-    let message: string = messageData.message;
+    let messageString: string = messageData.message;
+
+    let date = new Date();
+    date.setTime(date.getTime() + 2*60*60*1000);
+
+    const message: Message = {
+      message: messageString,
+      user: this.chatService.username,
+      timestamp: new Date(date)
+    }
+
     this.messageForm.get('message').reset();
     this.isTyping = false;
     this.chatService.sendTypingStatus(this.chatService.username, this.isTyping);
