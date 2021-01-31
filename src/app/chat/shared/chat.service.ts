@@ -9,6 +9,7 @@ import {Message} from './message';
 export class ChatService {
 
   username: string = "";
+  isRegistered: boolean = false;
 
   constructor(private socket: Socket) { }
 

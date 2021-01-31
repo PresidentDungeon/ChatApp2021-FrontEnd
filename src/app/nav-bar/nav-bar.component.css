@@ -1,0 +1,43 @@
+#nav-bar{
+  background-color: #0d0d0d;
+}
+
+ul {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar-route {
+  color: #f28e1c;
+}
+
+.nav-bar-route a {
+  display: block;
+  color: #f28e1c;
+  text-align: center;
+  padding: 14px 53px;
+  text-decoration: none;
+}
+
+.nav-bar-route a:hover {
+  background-color: #1d1d1d;
+  cursor: pointer;
+}
+
+.pageover-route a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+input{
+  text-decoration: none;
+  outline: none;
+}

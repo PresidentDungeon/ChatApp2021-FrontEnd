@@ -25,10 +25,16 @@ export class RegistrationComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
 
+    this.chatService.isRegistered = false;
+
     this.subscriptionRegister = this.chatService.registerResponse().subscribe((success) => {
-      if(success){this.chatService.username = this.username; this.router.navigate(['/chats']);}
+      if(success){this.chatService.username = this.username; this.chatService.isRegistered = true; this.router.navigate(['/chats']);}
       else{this.error = 'User with same username already registered in chat'}
       this.registerLoad = false;
+    });
+
+    this.registerForm.patchValue({
+      name:this.chatService.username
     });
   }
 
@@ -37,8 +43,6 @@ export class RegistrationComponent implements OnInit, OnDestroy{
   }
 
   createUser(): void{
-
-
 
     this.registerLoad = true;
     const registerData = this.registerForm.value;

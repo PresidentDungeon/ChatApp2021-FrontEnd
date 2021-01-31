@@ -13,6 +13,7 @@ export class UserAuthGuard implements CanActivate{
 
   canActivate(): boolean{
     if(this.chatService.username !== null && this.chatService.username !== ''){
+      if(!this.chatService.isRegistered){this.chatService.registerUser(this.chatService.username); console.log("Registered from AuthGuard!!!")};
       return true;
     }
     else{
