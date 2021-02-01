@@ -39,13 +39,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
    subscriptionChat: Subscription;
    subscriptionTyping: Subscription;
 
-   subscriptionUserRequest: Subscription;
    subscriptionUserLeave: Subscription;
    subscriptionUserJoin: Subscription;
 
   constructor(private chatService: ChatService, private elementRef : ElementRef) { }
 
   ngOnInit(): void {
+
+    this.chatService.getConnectedUsers().subscribe((connectedUsers) => {this.connectedUsers = connectedUsers; this.loading = false;});
 
     this.subscriptionChat = this.chatService.listenForMessages().subscribe((message) => {
       this.messages.push(message);
@@ -70,17 +71,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
       if (index !== -1) {this.connectedUsers.splice(index, 1);}
     })
 
-    this.subscriptionUserRequest = this.chatService.handleUserResponse().subscribe((users) => {
-      this.connectedUsers = users; this.loading = false;
-    });
-
-    this.chatService.handleUserRequest();
   }
 
   ngOnDestroy(): void {
     if(this.subscriptionChat){this.subscriptionChat.unsubscribe();}
     if(this.subscriptionTyping){this.subscriptionTyping.unsubscribe();}
-    if(this.subscriptionUserRequest){this.subscriptionUserRequest.unsubscribe();}
     if(this.subscriptionUserJoin){this.subscriptionUserJoin.unsubscribe();}
     if(this.subscriptionUserLeave){this.subscriptionUserLeave.unsubscribe();}
 

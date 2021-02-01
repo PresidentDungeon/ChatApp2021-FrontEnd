@@ -9,7 +9,7 @@ import {Subscription} from 'rxjs';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit, OnDestroy{
+export class RegistrationComponent implements OnInit{
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)])
@@ -19,27 +19,15 @@ export class RegistrationComponent implements OnInit, OnDestroy{
   registerLoad: boolean = false;
   username: string = ''
 
-  subscriptionRegister: Subscription;
-
   constructor(private chatService: ChatService, private router: Router) { }
 
   ngOnInit(): void {
 
     this.chatService.isRegistered = false;
 
-    this.subscriptionRegister = this.chatService.registerResponse().subscribe((success) => {
-      if(success){this.chatService.username = this.username; this.chatService.isRegistered = true; this.router.navigate(['/chats']);}
-      else{this.error = 'User with same username already registered in chat'}
-      this.registerLoad = false;
-    });
-
     this.registerForm.patchValue({
       name:this.chatService.username
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptionRegister.unsubscribe();
   }
 
   createUser(): void{
@@ -48,6 +36,11 @@ export class RegistrationComponent implements OnInit, OnDestroy{
     const registerData = this.registerForm.value;
     this.username = registerData.name;
 
-    this.chatService.registerUser(this.username)
+    this.chatService.registerUser(this.username).subscribe((data) => {
+
+      if(data.created){this.chatService.username = this.username; this.chatService.isRegistered = true; this.router.navigate(['/chats']);}
+      else{this.error = data.errorMessage}
+      this.registerLoad = false;
+    })
   }
 }

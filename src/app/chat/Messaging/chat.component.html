@@ -13,9 +13,10 @@
         <div class="col-md-10">
 
           <div id="textArea">
-            <p *ngFor="let message of messages;">
-              {{message.user}}: {{message.message}}
-            </p>
+            <section *ngFor="let message of messages">
+              <p class="inline"><b>{{message.user}}: </b> {{message.message}}</p>
+              <p id="dateText">({{message.timestamp | date:'short'}})</p>
+            </section>
           </div>
 
           <div *ngIf="typingUsers.length === 0">

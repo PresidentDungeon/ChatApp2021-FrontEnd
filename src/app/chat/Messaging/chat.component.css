@@ -3,13 +3,6 @@
   border-radius: 0;
 }
 
-h1 {
-}
-
-label {
-
-}
-
 input,
 input:focus {
   background: white;
@@ -69,8 +62,8 @@ progressbar{
   height: 400px;
   max-height: 400px;
   background-color: white;
+  word-break: break-word;
 
-  word-wrap: break-word
 }
 
 #trans{
@@ -92,6 +85,15 @@ ul {
 #counter{
   margin-top: -10px;
   margin-bottom: -0px;
+}
+
+.inline {
+  display: inline;
+}
+
+#dateText{
+  color: #3d3d3d;
+  font-size: 10px;
 }
 
 
