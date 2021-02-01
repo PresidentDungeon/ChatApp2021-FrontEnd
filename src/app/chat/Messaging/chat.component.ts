@@ -11,6 +11,7 @@ import {ChatService} from '../shared/chat.service';
 import {Subscription} from 'rxjs';
 import {debounceTime, tap} from 'rxjs/operators';
 import {Message} from '../shared/message';
+import {RegisterService} from '../../register/shared/register.service';
 
 @Component({
   selector: 'app-chat',
@@ -42,11 +43,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
    subscriptionUserLeave: Subscription;
    subscriptionUserJoin: Subscription;
 
-  constructor(private chatService: ChatService, private elementRef : ElementRef) { }
+  constructor(private chatService: ChatService, private registerService: RegisterService, private elementRef : ElementRef) { }
 
   ngOnInit(): void {
 
-    this.chatService.getConnectedUsers().subscribe((connectedUsers) => {this.connectedUsers = connectedUsers; this.loading = false;});
+    this.registerService.getConnectedUsers().subscribe((connectedUsers) => {this.connectedUsers = connectedUsers; this.loading = false;});
 
     this.subscriptionChat = this.chatService.listenForMessages().subscribe((message) => {
       this.messages.push(message);
@@ -62,11 +63,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
         debounceTime(5000))
       .subscribe(value => {this.checkTyping(false);});
 
-    this.subscriptionUserJoin = this.chatService.listenForRegister().subscribe((user) => {
+    this.subscriptionUserJoin = this.registerService.listenForRegister().subscribe((user) => {
       this.connectedUsers.push(user);
     })
 
-    this.subscriptionUserLeave = this.chatService.listenForUnregister().subscribe((user) => {
+    this.subscriptionUserLeave = this.registerService.listenForUnregister().subscribe((user) => {
       var index = this.connectedUsers.indexOf(user);
       if (index !== -1) {this.connectedUsers.splice(index, 1);}
     })
@@ -79,8 +80,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
     if(this.subscriptionUserJoin){this.subscriptionUserJoin.unsubscribe();}
     if(this.subscriptionUserLeave){this.subscriptionUserLeave.unsubscribe();}
 
-    this.chatService.unregisterUser(this.chatService.username);
-    this.chatService.sendTypingStatus(this.chatService.username, false);
+    this.registerService.unregisterUser(this.registerService.username);
+    this.chatService.sendTypingStatus(this.registerService.username, false);
   }
 
   ngAfterViewChecked(): void {
@@ -96,13 +97,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     const message: Message = {
       message: messageString,
-      user: this.chatService.username,
+      user: this.registerService.username,
       timestamp: new Date(date)
     }
 
     this.messageForm.get('message').reset();
     this.isTyping = false;
-    this.chatService.sendTypingStatus(this.chatService.username, this.isTyping);
+    this.chatService.sendTypingStatus(this.registerService.username, this.isTyping);
 
     this.chatService.sendMessage(message);
   }
@@ -110,7 +111,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   checkTyping(isTyping: boolean) {
     if (isTyping !== this.isTyping) {
       this.isTyping = isTyping;
-      this.chatService.sendTypingStatus(this.chatService.username, this.isTyping);
+      this.chatService.sendTypingStatus(this.registerService.username, this.isTyping);
     }
   }
 
