@@ -35,19 +35,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
    messages: Message[] = [];
    typingUsers: string[] = [];
-   connectedUsers: string[] = [];
 
    subscriptionChat: Subscription;
    subscriptionTyping: Subscription;
 
-   subscriptionUserLeave: Subscription;
-   subscriptionUserJoin: Subscription;
-
   constructor(private chatService: ChatService, private registerService: RegisterService, private elementRef : ElementRef) { }
 
   ngOnInit(): void {
-
-    this.registerService.getConnectedUsers().subscribe((connectedUsers) => {this.connectedUsers = connectedUsers; this.loading = false;});
 
     this.subscriptionChat = this.chatService.listenForMessages().subscribe((message) => {
       this.messages.push(message);
@@ -63,29 +57,21 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
         debounceTime(5000))
       .subscribe(value => {this.checkTyping(false);});
 
-    this.subscriptionUserJoin = this.registerService.listenForRegister().subscribe((user) => {
-      this.connectedUsers.push(user);
-    })
-
-    this.subscriptionUserLeave = this.registerService.listenForUnregister().subscribe((user) => {
-      var index = this.connectedUsers.indexOf(user);
-      if (index !== -1) {this.connectedUsers.splice(index, 1);}
-    })
+    //load all messages, then change loading input
+    this.loading = false;
 
   }
 
   ngOnDestroy(): void {
     if(this.subscriptionChat){this.subscriptionChat.unsubscribe();}
     if(this.subscriptionTyping){this.subscriptionTyping.unsubscribe();}
-    if(this.subscriptionUserJoin){this.subscriptionUserJoin.unsubscribe();}
-    if(this.subscriptionUserLeave){this.subscriptionUserLeave.unsubscribe();}
 
     this.registerService.unregisterUser(this.registerService.username);
     this.chatService.sendTypingStatus(this.registerService.username, false);
   }
 
   ngAfterViewChecked(): void {
-    if(this.shouldScroll){this.scrollToBottom("22"); this.shouldScroll = false;}
+    if(this.shouldScroll){this.scrollToBottom(); this.shouldScroll = false;}
   }
 
   sendMessage(): void{
@@ -115,12 +101,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
     }
   }
 
-  getTypers(): string{
-    return null;
-  }
-
-  scrollToBottom(text: string) {
-
+  scrollToBottom() {
      let offsetScroll: number = 85;
      let domElement = this.elementRef.nativeElement.querySelector(`#textArea`);
 

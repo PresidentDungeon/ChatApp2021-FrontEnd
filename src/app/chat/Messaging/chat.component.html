@@ -5,7 +5,7 @@
 
     <div class="container" *ngIf="!loading">
       <h6 id="errorMsg" align="center">{{error}}</h6>
-    </div>
+
 
     <div class="container main-content">
       <div class="row">
@@ -47,16 +47,12 @@
         </div>
 
         <div class="col-md-2" id="activeChatters">
-          <h6 align="center">Active chatters ({{connectedUsers.length}})</h6>
-
-          <ul>
-            <li *ngFor="let user of connectedUsers">
-              <p>{{user}}</p>
-            </li>
-          </ul>
-
+          <app-active-users></app-active-users>
         </div>
+
+
       </div>
+    </div>
     </div>
   </div>
 

@@ -5,10 +5,11 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import { ChatRoutingModule } from './chat-routing.module';
 import { ChatComponent } from './Messaging/chat.component';
 import {ProgressbarModule} from 'ngx-bootstrap/progressbar';
+import { ActiveUsersComponent } from './active-users/active-users.component';
 
 
 @NgModule({
-  declarations: [ChatComponent],
+  declarations: [ChatComponent, ActiveUsersComponent],
   imports: [
     CommonModule,
     ChatRoutingModule,
