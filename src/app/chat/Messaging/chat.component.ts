@@ -1,5 +1,6 @@
 import {
-  AfterViewChecked,
+  AfterContentInit,
+  AfterViewChecked, AfterViewInit,
   Component,
   ElementRef,
   HostListener,
@@ -57,17 +58,17 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
         debounceTime(5000))
       .subscribe(value => {this.checkTyping(false);});
 
-    //load all messages, then change loading input
-    this.loading = false;
-
+    this.chatService.getAllMessages().subscribe((messages) => {this.messages = messages;},
+      () => {this.loading = false;},
+      () => {this.loading = false;})
   }
 
   ngOnDestroy(): void {
     if(this.subscriptionChat){this.subscriptionChat.unsubscribe();}
     if(this.subscriptionTyping){this.subscriptionTyping.unsubscribe();}
 
-    this.registerService.unregisterUser(this.registerService.username);
-    this.chatService.sendTypingStatus(this.registerService.username, false);
+    this.registerService.unregisterUser(this.registerService.user);
+    this.chatService.sendTypingStatus(this.registerService.user.username, false);
   }
 
   ngAfterViewChecked(): void {
@@ -83,13 +84,13 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     const message: Message = {
       message: messageString,
-      user: this.registerService.username,
+      user: this.registerService.user,
       timestamp: new Date(date)
     }
 
     this.messageForm.get('message').reset();
     this.isTyping = false;
-    this.chatService.sendTypingStatus(this.registerService.username, this.isTyping);
+    this.chatService.sendTypingStatus(this.registerService.user.username, this.isTyping);
 
     this.chatService.sendMessage(message);
   }
@@ -97,7 +98,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   checkTyping(isTyping: boolean) {
     if (isTyping !== this.isTyping) {
       this.isTyping = isTyping;
-      this.chatService.sendTypingStatus(this.registerService.username, this.isTyping);
+      this.chatService.sendTypingStatus(this.registerService.user.username, this.isTyping);
     }
   }
 
@@ -131,5 +132,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     }
   }
+
+
 
 }

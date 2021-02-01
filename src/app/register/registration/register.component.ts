@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {RegisterService} from '../shared/register.service';
+import {User} from '../../shared/user';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,6 @@ export class RegisterComponent implements OnInit {
 
   error: string = '';
   registerLoad: boolean = false;
-  username: string = ''
 
   constructor(private registerService: RegisterService, private router: Router) { }
 
@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
     this.registerService.isRegistered = false;
 
     this.registerForm.patchValue({
-      name:this.registerService.username
+      name: (this.registerService.user !== null) ? this.registerService.user.username : ''
     });
   }
 
@@ -33,11 +33,11 @@ export class RegisterComponent implements OnInit {
 
     this.registerLoad = true;
     const registerData = this.registerForm.value;
-    this.username = registerData.name;
+    this.registerService.user = {username: registerData.name};
 
-    this.registerService.registerUser(this.username).subscribe((data) => {
+    this.registerService.registerUser(this.registerService.user).subscribe((data) => {
 
-      if(data.created){this.registerService.username = this.username; this.registerService.isRegistered = true; this.router.navigate(['/chats']);}
+      if(data.created){this.registerService.user = this.registerService.user; this.registerService.isRegistered = true; this.router.navigate(['/chats']);}
       else{this.error = data.errorMessage}
       this.registerLoad = false;
     })

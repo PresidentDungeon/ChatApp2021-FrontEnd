@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
-import {ChatService} from '../chat/shared/chat.service';
 import {RegisterService} from '../register/shared/register.service';
 
 @Injectable({
@@ -13,8 +12,8 @@ export class UserAuthGuard implements CanActivate{
   }
 
   canActivate(): boolean{
-    if(this.registerService.username !== null && this.registerService.username !== ''){
-      if(!this.registerService.isRegistered){this.registerService.registerUser(this.registerService.username).subscribe();};
+    if(this.registerService.user !== null && this.registerService.user.username !== ''){
+      if(!this.registerService.isRegistered){this.registerService.registerUser(this.registerService.user).subscribe();};
       return true;
     }
 

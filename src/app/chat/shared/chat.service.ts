@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import {Socket} from 'ngx-socket-io';
 import {Observable} from 'rxjs';
 import {Message} from './message';
+import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-
-
-  constructor(private socket: Socket) {
+  constructor(private socket: Socket, private http: HttpClient) {
   }
 
   //Message handling
@@ -23,11 +23,15 @@ export class ChatService {
     return this.socket.fromEvent<Message>('messages');
   }
 
+  getAllMessages(): Observable<Message[]>{
+    return this.http.get<Message[]>(environment.apiUrl + '/chat');
+  }
+
 
   //Typing status
 
-  sendTypingStatus(user: string, typing: boolean): void{
-    this.socket.emit('typing', {user: user, typing: typing});
+  sendTypingStatus(username: string, typing: boolean): void{
+    this.socket.emit('typing', {user: username, typing: typing});
   }
 
   listenForTyping(): Observable<string[]>{

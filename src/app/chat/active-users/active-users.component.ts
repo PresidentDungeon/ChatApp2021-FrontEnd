@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {ChatService} from '../shared/chat.service';
 import {RegisterService} from '../../register/shared/register.service';
+import {User} from '../../shared/user';
 
 @Component({
   selector: 'app-active-users',
@@ -10,7 +11,7 @@ import {RegisterService} from '../../register/shared/register.service';
 })
 export class ActiveUsersComponent implements OnInit, OnDestroy {
 
-  connectedUsers: string[] = [];
+  connectedUsers: User[] = [];
 
 
   subscriptionUserLeave: Subscription;
@@ -27,7 +28,13 @@ export class ActiveUsersComponent implements OnInit, OnDestroy {
     })
 
     this.subscriptionUserLeave = this.registerService.listenForUnregister().subscribe((user) => {
-      var index = this.connectedUsers.indexOf(user);
+
+      var index: number = -1;
+
+      for(var i = 0; i < this.connectedUsers.length; i++){
+        if(this.connectedUsers[i].username === user.username){index = i; break;}
+      }
+
       if (index !== -1) {this.connectedUsers.splice(index, 1);}
     })
 
