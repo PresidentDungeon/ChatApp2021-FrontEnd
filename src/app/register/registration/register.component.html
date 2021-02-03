@@ -9,11 +9,12 @@
       <div class="form-group">
         <div class="col-sm-4 offset-sm-4">
           <label for="name">Username</label>
-          <input type="text" class="form-control" formControlName="name" id="name" placeholder="Enter desired username:" minlength="1" maxlength="16" pattern="^(?!.* {2})(?=\S)(?=.*\S$)[a-zA-Z æøåÆØÅ0-9 ]+$">
+          <input type="text" class="form-control" formControlName="name" id="name" placeholder="Enter desired username:" minlength="1" maxlength="16" pattern="^(?!.* {2})(?=\S)(?=.*\S$)[a-zA-Z æøåÆØÅ0-9 ]+$" autocomplete="off">
         </div>
 
         <div class="col-sm-8 offset-sm-4">
           <h6 id="error" *ngIf="registerForm.get('name').invalid && registerForm.get('name').dirty">Name must be between 0-16 characters</h6>
+          <h6 *ngIf="registerForm.get('name').value === '' && !registerForm.get('name').dirty || registerForm.get('name').valid">⠀</h6>
         </div>
       </div>
 

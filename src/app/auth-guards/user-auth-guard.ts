@@ -13,7 +13,7 @@ export class UserAuthGuard implements CanActivate{
 
   canActivate(): boolean{
     if(this.registerService.user !== null && this.registerService.user.username !== ''){
-      if(!this.registerService.isRegistered){this.registerService.registerUser(this.registerService.user).subscribe();};
+      if(!this.registerService.isRegistered){this.registerService.registerUser(this.registerService.user);};
       return true;
     }
 

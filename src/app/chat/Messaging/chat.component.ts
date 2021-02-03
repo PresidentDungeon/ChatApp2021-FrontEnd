@@ -67,7 +67,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
     if(this.subscriptionChat){this.subscriptionChat.unsubscribe();}
     if(this.subscriptionTyping){this.subscriptionTyping.unsubscribe();}
 
-    this.registerService.unregisterUser(this.registerService.user);
+    // this.registerService.unregisterUser(this.registerService.user);
+    this.registerService.unregisterUser();
     this.chatService.sendTypingStatus(this.registerService.user.username, false);
   }
 
