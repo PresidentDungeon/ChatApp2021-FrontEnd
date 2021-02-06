@@ -45,7 +45,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     this.chatService.listenForMessages().pipe(takeUntil(this.unsubscriber$)).
     subscribe((message) => {
-      console.log("Weee");
       this.messages.push(message);
       this.shouldScroll = true;
     });
