@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ChatService} from '../shared/chat.service';
-import {Subscription} from 'rxjs';
-import {debounceTime, tap} from 'rxjs/operators';
+import {Subject, Subscription} from 'rxjs';
+import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {Message} from '../shared/message';
 import {RegisterService} from '../../register/shared/register.service';
 
@@ -37,19 +37,21 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
    messages: Message[] = [];
    typingUsers: string[] = [];
 
-   subscriptionChat: Subscription;
-   subscriptionTyping: Subscription;
+   unsubscriber$ = new Subject();
 
   constructor(private chatService: ChatService, private registerService: RegisterService, private elementRef : ElementRef) { }
 
   ngOnInit(): void {
 
-    this.subscriptionChat = this.chatService.listenForMessages().subscribe((message) => {
+    this.chatService.listenForMessages().pipe(takeUntil(this.unsubscriber$)).
+    subscribe((message) => {
+      console.log("Weee");
       this.messages.push(message);
       this.shouldScroll = true;
     });
 
-    this.subscriptionTyping = this.chatService.listenForTyping().subscribe((users) => {
+    this.chatService.listenForTyping().pipe(takeUntil(this.unsubscriber$)).
+    subscribe((users) => {
       this.typingUsers = users;
     })
 
@@ -64,8 +66,10 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   }
 
   ngOnDestroy(): void {
-    if(this.subscriptionChat){this.subscriptionChat.unsubscribe();}
-    if(this.subscriptionTyping){this.subscriptionTyping.unsubscribe();}
+
+    this.unsubscriber$.next();
+    this.unsubscriber$.complete();
+
 
     // this.registerService.unregisterUser(this.registerService.user);
     this.registerService.unregisterUser();
