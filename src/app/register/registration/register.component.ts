@@ -30,8 +30,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
     });
 
     this.subscriptionRegister = this.registerService.getRegisterResponse().subscribe((data: any) => {
-      if(data.created && this.registerService.isRegistered){this.registerService.unregisterUser();}
-      if(data.created){this.registerService.user = this.registerService.user; this.registerService.isRegistered = true; this.registerService.user = data.user; this.router.navigate(['/chats']);}
+      // if(data.created && this.registerService.isRegistered){this.registerService.unregisterUser();}
+      if(data.created){this.registerService.isRegistered = true; this.registerService.user = data.user; this.router.navigate(['/chats']);}
       else{this.error = data.errorMessage}
       this.registerLoad = false;
     })
@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     {this.router.navigate(['/chats']);}
 
     else{
-      var userToCreate: User = {id: '', username: registerData.name};
+      let userToCreate: User = {id: '', username: registerData.name};
       this.registerService.registerUser(userToCreate);
     }
   }
