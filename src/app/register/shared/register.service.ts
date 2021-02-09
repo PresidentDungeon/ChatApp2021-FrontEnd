@@ -16,21 +16,9 @@ export class RegisterService {
 
   constructor(private socket: Socket, private http: HttpClient) { }
 
-  // registerUser(user: User): Observable<any>{
-  //   return this.http.post<any>(environment.apiUrl + '/user/register', {user: user});
-  // }
-  //
-  // unregisterUser(user: User): boolean {
-  //   return this.socket.emit('unregister', user);
-  // }
-
   registerUser(user: User): void{
     this.socket.emit('register', user);
   }
-
-  // unregisterUser(user: User): void{
-  //   this.socket.emit('unregister', user);
-  // }
 
   unregisterUser(): void{
     this.socket.emit('unregister');

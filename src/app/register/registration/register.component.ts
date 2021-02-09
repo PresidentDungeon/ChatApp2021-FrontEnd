@@ -25,13 +25,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
 
-    this.registerService.isRegistered = false;
-
     this.registerForm.patchValue({
       name: (this.registerService.user !== null) ? this.registerService.user.username : ''
     });
 
     this.subscriptionRegister = this.registerService.getRegisterResponse().subscribe((data: any) => {
+      if(data.created && this.registerService.isRegistered){this.registerService.unregisterUser();}
       if(data.created){this.registerService.user = this.registerService.user; this.registerService.isRegistered = true; this.registerService.user = data.user; this.router.navigate(['/chats']);}
       else{this.error = data.errorMessage}
       this.registerLoad = false;
@@ -46,9 +45,14 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
     this.registerLoad = true;
     const registerData = this.registerForm.value;
-    this.registerService.user = {id: '', username: registerData.name};
 
-    this.registerService.registerUser(this.registerService.user);
+    if(this.registerService.isRegistered && registerData.name.toLowerCase() === this.registerService.user.username.toLowerCase())
+    {this.router.navigate(['/chats']);}
+
+    else{
+      var userToCreate: User = {id: '', username: registerData.name};
+      this.registerService.registerUser(userToCreate);
+    }
   }
 
 

@@ -18,7 +18,6 @@ export class UserAuthGuard implements CanActivate{
       subscribe((exists) => {if(exists){return false;}else{this.registerService.registerUser(this.registerService.user); return true}},
         () => {return false;})}
       else{return true;}
-
     }
 
     else{

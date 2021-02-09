@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import {ChatService} from '../shared/chat.service';
 import {RegisterService} from '../../register/shared/register.service';
 import {User} from '../../shared/user';
+import {take, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-active-users',
@@ -12,10 +13,7 @@ import {User} from '../../shared/user';
 export class ActiveUsersComponent implements OnInit, OnDestroy {
 
   connectedUsers: User[] = [];
-
-
-  subscriptionUserLeave: Subscription;
-  subscriptionUserJoin: Subscription;
+  unsubscriber$ = new Subject();
 
   constructor(private chatService: ChatService, private registerService: RegisterService) { }
 
@@ -23,11 +21,11 @@ export class ActiveUsersComponent implements OnInit, OnDestroy {
 
     this.registerService.getConnectedUsers().subscribe((connectedUsers) => {this.connectedUsers = connectedUsers;});
 
-    this.subscriptionUserJoin = this.registerService.listenForRegister().subscribe((user) => {
+    this.registerService.listenForRegister().pipe(takeUntil(this.unsubscriber$)).subscribe((user) => {
       this.connectedUsers.push(user);
     })
 
-    this.subscriptionUserLeave = this.registerService.listenForUnregister().subscribe((user) => {
+    this.registerService.listenForUnregister().pipe(takeUntil(this.unsubscriber$)).subscribe((user) => {
 
       var index: number = -1;
 
@@ -41,8 +39,8 @@ export class ActiveUsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.subscriptionUserJoin){this.subscriptionUserJoin.unsubscribe();}
-    if(this.subscriptionUserLeave){this.subscriptionUserLeave.unsubscribe();}
+    this.unsubscriber$.next();
+    this.unsubscriber$.complete();
   }
 
 }

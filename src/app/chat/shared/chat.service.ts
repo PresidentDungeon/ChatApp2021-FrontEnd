@@ -27,7 +27,6 @@ export class ChatService {
     return this.http.get<Message[]>(environment.apiUrl + '/chat');
   }
 
-
   //Typing status
 
   sendTypingStatus(username: string, typing: boolean): void{
@@ -37,9 +36,5 @@ export class ChatService {
   listenForTyping(): Observable<string[]>{
     return this.socket.fromEvent<string[]>('typers');
   }
-
-
-
-
 
 }
