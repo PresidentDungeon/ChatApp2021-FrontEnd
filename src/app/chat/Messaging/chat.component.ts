@@ -91,7 +91,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
     const message: Message = {
       message: messageString,
       user: this.registerService.user,
-      timestamp: new Date(date)
+      timestamp: new Date(date),
+      isSystemInfo: false
     }
 
     this.messageForm.get('message').reset();
@@ -137,7 +138,4 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
       else{text += ", ";}
     }
   }
-
-
-
 }
