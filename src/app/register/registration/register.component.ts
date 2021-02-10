@@ -13,7 +13,8 @@ import {Subscription} from 'rxjs';
 export class RegisterComponent implements OnInit, OnDestroy{
 
   registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)])
+    name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
+    room: new FormControl('', [])
   });
 
   error: string = '';
@@ -26,7 +27,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
 
     this.registerForm.patchValue({
-      name: (this.registerService.user !== null) ? this.registerService.user.username : ''
+      name: (this.registerService.user !== null) ? this.registerService.user.username : '',
+      room: (this.registerService.user !== null) ? this.registerService.user.room : ''
     });
 
     this.subscriptionRegister = this.registerService.getRegisterResponse().subscribe((data: any) => {
@@ -44,12 +46,21 @@ export class RegisterComponent implements OnInit, OnDestroy{
 
     this.registerLoad = true;
     const registerData = this.registerForm.value;
+    let room: string = (registerData.room === '') ? 'room1' : registerData.room.toLowerCase();
 
-    if(this.registerService.isRegistered && registerData.name.toLowerCase() === this.registerService.user.username.toLowerCase())
-    {this.router.navigate(['/chats']);}
+    if(this.registerService.isRegistered && registerData.name.toLowerCase() === this.registerService.user.username.toLowerCase() && room.toLowerCase() === this.registerService.user.room){
+
+    if(registerData.name !== this.registerService.user.username){this.registerService.unregisterUser();
+    let userToCreate:User = {id: '', username: registerData.name, room: room}
+    this.registerService.user = userToCreate;
+    this.registerService.registerUser(userToCreate);}
+
+    this.router.navigate(['/chats']);
+    }
 
     else{
-      let userToCreate: User = {id: '', username: registerData.name};
+
+      let userToCreate: User = {id: '', username: registerData.name, room: room};
       this.registerService.registerUser(userToCreate);
     }
   }

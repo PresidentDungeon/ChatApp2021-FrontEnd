@@ -24,8 +24,12 @@ export class RegisterService {
     this.socket.emit('unregister');
   }
 
-  getConnectedUsers(): Observable<User[]>{
-    return this.http.get<User[]>(environment.apiUrl + '/user');
+  updateUser(user: User): void{
+    this.socket.emit('updateUser', user);
+  }
+
+  getConnectedUsers(room: string): Observable<User[]>{
+    return this.http.post<User[]>(environment.apiUrl + '/user/users', {room: room});
   }
 
   getConnectedUsersAmount(): Observable<number>{

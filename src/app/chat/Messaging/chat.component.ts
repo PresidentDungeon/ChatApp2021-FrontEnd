@@ -59,7 +59,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
         debounceTime(5000))
       .subscribe(value => {this.checkTyping(false);});
 
-    this.chatService.getAllMessages().subscribe((messages) => {this.messages = messages;},
+    this.chatService.getAllMessages(this.registerService.user).subscribe((messages) => {this.messages = messages;},
       () => {this.loading = false;},
       () => {this.loading = false; })
 
@@ -134,7 +134,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
       if(numberCount === size - 1 || numberCount === maxSize - 1){text += (size === 1) ? " is typing..." : " are typing..."; return text;}
       if(numberCount === size - 2 || numberCount === maxSize - 2){text += " & ";}
       else{text += ", ";}
-
     }
   }
 

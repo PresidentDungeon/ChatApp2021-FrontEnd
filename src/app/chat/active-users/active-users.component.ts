@@ -19,7 +19,7 @@ export class ActiveUsersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.registerService.getConnectedUsers().subscribe((connectedUsers) => {this.connectedUsers = connectedUsers;});
+    this.registerService.getConnectedUsers(this.registerService.user.room).subscribe((connectedUsers) => {this.connectedUsers = connectedUsers;});
 
     this.registerService.listenForRegister().pipe(takeUntil(this.unsubscriber$)).subscribe((user) => {
       this.connectedUsers.push(user);
