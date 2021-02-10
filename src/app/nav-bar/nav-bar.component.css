@@ -49,3 +49,11 @@ input{
   padding: 14px 53px;
   text-decoration: none;
 }
+
+#newMessages{
+  display: block;
+  color: red;
+  text-align: center;
+  padding: 14px 53px;
+  text-decoration: none;
+}

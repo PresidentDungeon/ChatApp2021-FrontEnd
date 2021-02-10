@@ -61,7 +61,10 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     this.chatService.getAllMessages().subscribe((messages) => {this.messages = messages;},
       () => {this.loading = false;},
-      () => {this.loading = false;})
+      () => {this.loading = false; })
+
+    this.chatService.isOnActiveChat = true;
+    this.chatService.newMessages = 0;
   }
 
   ngOnDestroy(): void {
@@ -69,8 +72,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
 
-    //this.registerService.unregisterUser();
     this.chatService.sendTypingStatus(this.registerService.user.username, false);
+    this.chatService.isOnActiveChat = false;
   }
 
   ngAfterViewChecked(): void {

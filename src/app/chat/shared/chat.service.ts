@@ -10,6 +10,9 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ChatService {
 
+  isOnActiveChat: boolean = false;
+  newMessages: number = 0;
+
   constructor(private socket: Socket, private http: HttpClient) {
   }
 
