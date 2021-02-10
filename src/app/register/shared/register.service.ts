@@ -28,6 +28,10 @@ export class RegisterService {
     return this.http.get<User[]>(environment.apiUrl + '/user');
   }
 
+  getConnectedUsersAmount(): Observable<number>{
+    return this.http.get<number>(environment.apiUrl + '/user/amount');
+  }
+
   searchExistingUser(user: User): Observable<boolean>{
      return this.http.post<boolean>(environment.apiUrl + '/user', {user: user});
   }
@@ -42,5 +46,9 @@ export class RegisterService {
 
   listenForUnregister(): Observable<User>{
     return this.socket.fromEvent<User>('userLeave');
+  }
+
+  listenForOnlineAmount(): Observable<number>{
+    return this.socket.fromEvent<number>('activeUsers');
   }
 }

@@ -41,3 +41,11 @@ input{
   text-decoration: none;
   outline: none;
 }
+
+#onlineUsers{
+  display: block;
+  color: #f28e1c;
+  text-align: center;
+  padding: 14px 53px;
+  text-decoration: none;
+}

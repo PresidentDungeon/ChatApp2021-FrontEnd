@@ -30,7 +30,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     });
 
     this.subscriptionRegister = this.registerService.getRegisterResponse().subscribe((data: any) => {
-      // if(data.created && this.registerService.isRegistered){this.registerService.unregisterUser();}
       if(data.created){this.registerService.isRegistered = true; this.registerService.user = data.user; this.router.navigate(['/chats']);}
       else{this.error = data.errorMessage}
       this.registerLoad = false;
