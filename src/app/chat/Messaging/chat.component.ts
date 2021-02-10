@@ -13,6 +13,7 @@ import {Subject, Subscription} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {Message} from '../shared/message';
 import {RegisterService} from '../../register/shared/register.service';
+import {User} from '../../shared/user';
 
 @Component({
   selector: 'app-chat',
@@ -35,7 +36,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
    shouldScroll: boolean;
 
    messages: Message[] = [];
-   typingUsers: string[] = [];
+   typingUsers: User[] = [];
 
    unsubscriber$ = new Subject();
 
@@ -72,7 +73,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
 
-    this.chatService.sendTypingStatus(this.registerService.user.username, false);
+    this.chatService.sendTypingStatus(this.registerService.user, false);
     this.chatService.isOnActiveChat = false;
   }
 
@@ -95,7 +96,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     this.messageForm.get('message').reset();
     this.isTyping = false;
-    this.chatService.sendTypingStatus(this.registerService.user.username, this.isTyping);
+    this.chatService.sendTypingStatus(this.registerService.user, this.isTyping);
 
     this.chatService.sendMessage(message);
   }
@@ -103,7 +104,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   checkTyping(isTyping: boolean) {
     if (isTyping !== this.isTyping) {
       this.isTyping = isTyping;
-      this.chatService.sendTypingStatus(this.registerService.user.username, this.isTyping);
+      this.chatService.sendTypingStatus(this.registerService.user, this.isTyping);
     }
   }
 
@@ -129,7 +130,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     for (numberCount; numberCount <= size; numberCount++) {
 
-      text += this.typingUsers[numberCount].bold();
+      text += this.typingUsers[numberCount].username.bold();
 
       if(numberCount === size - 1 || numberCount === maxSize - 1){text += (size === 1) ? " is typing..." : " are typing..."; return text;}
       if(numberCount === size - 2 || numberCount === maxSize - 2){text += " & ";}

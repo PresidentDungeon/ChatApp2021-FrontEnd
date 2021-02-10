@@ -33,12 +33,12 @@ export class ChatService {
 
   //Typing status
 
-  sendTypingStatus(username: string, typing: boolean): void{
-    this.socket.emit('typing', {user: username, typing: typing});
+  sendTypingStatus(user: User, typing: boolean): void{
+    this.socket.emit('typing', {user: user, typing: typing});
   }
 
-  listenForTyping(): Observable<string[]>{
-    return this.socket.fromEvent<string[]>('typers');
+  listenForTyping(): Observable<User[]>{
+    return this.socket.fromEvent<User[]>('typers');
   }
 
 }
