@@ -34,6 +34,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
    error: string = '';
    isTyping: boolean;
    shouldScroll: boolean;
+   joinedUser: User;
 
    messages: Message[] = [];
    typingUsers: User[] = [];
@@ -66,6 +67,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     this.chatService.isOnActiveChat = true;
     this.chatService.newMessages = 0;
+    this.joinedUser = this.registerService.user;
   }
 
   ngOnDestroy(): void {
