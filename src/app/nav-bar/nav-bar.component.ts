@@ -20,7 +20,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this.registerService.getConnectedUsersAmount().subscribe((data) => {this.onlineUsers = data;});
     this.registerService.listenForOnlineAmount().pipe(takeUntil(this.unsubscriber$)).subscribe((data) => {this.onlineUsers = data;})
     this.chatService.listenForMessages().pipe(takeUntil(this.unsubscriber$)).subscribe((message) => {
-      if(!this.chatService.isOnActiveChat && this.registerService.isRegistered){this.chatService.newMessages++;}
+      if(!this.chatService.isOnActiveChat && this.registerService.isRegistered && !message.isSystemInfo){this.chatService.newMessages++;}
     })
   }
 
