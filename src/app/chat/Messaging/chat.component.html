@@ -15,7 +15,7 @@
           <div id="textArea">
             <section *ngFor="let message of messages">
               <p *ngIf="!message.isSystemInfo" class="inline"><b>{{message.user.username}}: </b> {{message.message}}</p>
-              <p *ngIf="!message.isSystemInfo" id="dateText">({{message.timestamp | date:'short'}})</p>
+              <p *ngIf="!message.isSystemInfo" id="dateText">({{message.timestamp | date:'dd-MM-yyyy HH:mm' : '-1'}})</p>
               <p *ngIf="message.isSystemInfo" class="info" align="center">{{message.message}}</p>
             </section>
           </div>
