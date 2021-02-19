@@ -14,9 +14,18 @@
 
           <div id="textArea">
             <section *ngFor="let message of messages">
-              <p *ngIf="!message.isSystemInfo" class="inline"><b>{{message.user.username}}: </b> {{message.message}}</p>
-              <p *ngIf="!message.isSystemInfo" id="dateText">({{message.timestamp | date:'dd-MM-yyyy HH:mm' : '-1'}})</p>
-              <p *ngIf="message.isSystemInfo" class="info" align="center">{{message.message}}</p>
+              <div class="row" id="test">
+                <img *ngIf="!message.isSystemInfo" id="chatImage" class="col" src="https://i.imgur.com/Nsm95z7.png">
+                <ul class="col">
+                  <li>
+                    <p *ngIf="!message.isSystemInfo" class="col" id="chatText"><b>{{message.user.username}}: </b> {{message.message}}</p>
+                  </li>
+                  <li>
+                    <p *ngIf="!message.isSystemInfo" class="" id="dateText">({{message.timestamp | date:'short'}})</p>
+                    <p *ngIf="message.isSystemInfo" class="info" align="center">{{message.message}}</p>
+                  </li>
+                </ul>
+              </div>
             </section>
           </div>
 

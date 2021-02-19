@@ -58,6 +58,7 @@ progressbar{
 
 #textArea{
   overflow-y: scroll;
+  overflow-x: hidden;
   scroll-behavior: auto;
   height: 400px;
   max-height: 400px;
@@ -89,11 +90,34 @@ progressbar{
 #dateText{
   color: #3d3d3d;
   font-size: 10px;
+  margin-top: -10px;
+}
+
+#chatImage{
+  min-height: 40px;
+  min-width: 70px;
+  max-width: 70px;
+  max-height: 40px;
+}
+
+#chatText{
+  margin-top: -6px;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+#textArea ul{
+  list-style: none;
+  padding: 0px;
 }
 
 .info{
   color: #3d3d3d;
   font-size: 10px;
+}
+
+#test{
+  margin-left: -10px;
 }
 
 
