@@ -1,0 +1,56 @@
+.jumbotron {
+  background-size: cover;
+  background-position-y: center;
+  margin-bottom: 0px;
+  border-radius: 0;
+}
+
+table {
+  color: #000000;
+  border-top: solid 1px #020202;
+  border-left: solid 1px #020202;
+  border-bottom: solid 1px #020202;
+  margin-bottom: 15px;
+}
+
+td, th {
+  font-size: medium;
+  padding: 15px;
+  color: #000000;
+  border-right: solid 1px #000000;
+}
+
+progressbar{
+  width: 300px;
+  margin-left: auto;
+  margin-right:auto;
+}
+
+.data:hover{
+  background-color: rgba(146,143,142,0.5);
+  cursor: pointer;
+}
+
+.selected{
+  background-color: rgba(146,143,142,0.8);
+}
+
+table tr td
+{
+  border-top: solid 2px #000000;
+}
+
+#price{
+  color: #0d0d0d;
+}
+
+#pages {
+  justify-content: center;
+}
+
+#paging {
+  position: relative;
+  right: 20px;
+  justify-content: center;
+}
+

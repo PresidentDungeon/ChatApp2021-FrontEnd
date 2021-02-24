@@ -9,6 +9,7 @@ import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   declarations: [ChatComponent, ActiveUsersComponent],
+  exports: [],
   imports: [
     CommonModule,
     ChatRoutingModule,
