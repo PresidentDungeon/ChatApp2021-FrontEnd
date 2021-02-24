@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Socket} from 'ngx-socket-io';
 import {User} from '../../shared/user';
 import {Message} from '../../chat/shared/message';
+import {SocketChatApp} from '../../shared/shared.module';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class RegisterService {
   user: User = null;
   isRegistered: boolean = false;
 
-  constructor(private socket: Socket, private http: HttpClient) { }
+  constructor(private socket: SocketChatApp, private http: HttpClient) { }
 
   registerUser(user: User): void{
     this.socket.emit('register', user);

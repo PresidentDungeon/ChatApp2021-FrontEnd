@@ -1,14 +1,12 @@
 import {BrowserModule } from '@angular/platform-browser';
-import {NgModule } from '@angular/core';
+import {Injectable, NgModule} from '@angular/core';
 
-import {AppRoutingModule } from './app-routing.module';
-import {AppComponent } from './app.component';
-import {SocketIoModule, SocketIoConfig} from 'ngx-socket-io';
-import {NavBarComponent } from './nav-bar/nav-bar.component';
-import {HttpClientModule} from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import {Socket, SocketIoModule} from 'ngx-socket-io';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { HttpClientModule} from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
-const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}}
 
 @NgModule({
   declarations: [
@@ -19,7 +17,7 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}}
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    SocketIoModule.forRoot(config),
+    SocketIoModule.forRoot({url: ''}),
     FontAwesomeModule,
   ],
   providers: [],

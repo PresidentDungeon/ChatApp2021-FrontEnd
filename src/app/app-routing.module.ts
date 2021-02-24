@@ -6,6 +6,7 @@ const routes: Routes = [
   {path: '', redirectTo: 'register', pathMatch: 'full'},
   {path: 'chats', loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule), canActivate: [UserAuthGuard]},
   {path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterModule)},
+  {path: 'stock-exchange', loadChildren: () => import('./stock-exchange/stock-exchange.module').then(m => m.StockExchangeModule)},
 
 ];
 

@@ -5,6 +5,7 @@ import {Message} from './message';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {User} from '../../shared/user';
+import {SocketChatApp} from '../../shared/shared.module';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ChatService {
   isOnActiveChat: boolean = false;
   newMessages: number = 0;
 
-  constructor(private socket: Socket, private http: HttpClient) {
+  constructor(private socket: SocketChatApp, private http: HttpClient) {
   }
 
   //Message handling
