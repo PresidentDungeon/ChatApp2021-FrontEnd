@@ -35,23 +35,19 @@ export class StockComponent implements OnInit {
   constructor(private stockService: StockService) { }
 
   ngOnInit(): void {
-    this.getStock()
+    this.getStock();
   }
 
 
   getStock(): void{
 
     const filter: Filter = {currentPage: this.currentPage, itemsPrPage: this.itemsPrPage}
-    this.loading = true;
 
     this.stockService.getStock(filter).subscribe((FilterList) => {
       this.totalItems = FilterList.totalItems;
       this.stock = FilterList.list;
     }, error => {this.error = error.error}, () => {this.loading = false; });
   }
-
-
-
 
   selectStock(stock: Stock){
     console.log("Selected stock", stock);

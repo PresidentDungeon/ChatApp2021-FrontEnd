@@ -3,9 +3,6 @@
   <h1 align="center">Stock Exchange!</h1>
 
 
-
-
-
   <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
   <div class="container" *ngIf="!loading">
     <h6 id="errorMsg" align="center">{{error}}</h6>
@@ -24,22 +21,49 @@
 
     <div class="container main-content">
 
-      <div class="d-flex">
-        <table>
-          <tr>
-            <th scope="col">Stock name</th>
-            <th scope="col">Stock price</th>
-          </tr>
-          <tr class="data" *ngFor="let stockItem of stock" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
-            <td>{{stockItem.name}}</td>
-            <td id="price">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
-          </tr>
-        </table>
+      <div class="row">
+
+        <div class="col-md-4">
+          <table>
+            <tr>
+              <th scope="col">Stock name</th>
+              <th scope="col">Stock price</th>
+            </tr>
+            <tr class="data" *ngFor="let stockItem of stock" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
+              <td>{{stockItem.name}}</td>
+              <td id="price">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="col-md-8">
+          <div id="textArea">
+
+            <div *ngIf="selectedStock">
+              <h3 align="center">{{selectedStock.name}}</h3>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
 
-      <button class="btn btn-info"><fa-icon [icon]="circleLeft"></fa-icon> Go back</button>
+
+
+
     </div>
+
+    <div class="d-flex" id="btnArea">
+      <button class="p-2 btn btn-info" id="goBackButton"><fa-icon [icon]="circleLeft"></fa-icon> Go back</button>
+      <div class="col-md-3 offset-md-8 d-flex">
+        <button class="ml-auto p-2 btn btn-success btn-block">Add</button>
+        <button class="p-2 btn btn-warning btn-block">Update</button>
+        <button class="p-2 btn btn-danger btn-block">Delete</button>
+      </div>
+
+    </div>
+
 
     <div>
       <div id="pages" class="row">
