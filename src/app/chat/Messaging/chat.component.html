@@ -2,7 +2,6 @@
 
    <h1 align="center">Server ({{joinedUser.room}})</h1>
     <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
-
     <div class="container" *ngIf="!loading">
       <h6 id="errorMsg" align="center">{{error}}</h6>
 
@@ -48,11 +47,11 @@
             <p class="col text-center" id="counter">{{(messageForm.get("message").value === null) ? 0 : messageForm.get("message").value.length}}/300</p>
 
             <div class="col text-center">
-              <button class="btn btn-success" type="submit" [disabled]="!messageForm.valid">Send Message</button>
+              <button class="btn btn-success" type="submit" [disabled]="!messageForm.valid">Send Message <fa-icon [icon]="faPaperPlane"></fa-icon></button>
             </div>
           </form>
 
-          <button class="btn btn-info">Go back</button>
+          <button class="btn btn-info"><fa-icon [icon]="circleLeft"></fa-icon> Go back</button>
 
         </div>
 

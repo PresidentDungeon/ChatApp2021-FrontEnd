@@ -6,6 +6,7 @@ import {AppComponent } from './app.component';
 import {SocketIoModule, SocketIoConfig} from 'ngx-socket-io';
 import {NavBarComponent } from './nav-bar/nav-bar.component';
 import {HttpClientModule} from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}}
 
@@ -19,6 +20,7 @@ const config: SocketIoConfig = {url: 'http://localhost:3000', options: {}}
     HttpClientModule,
     AppRoutingModule,
     SocketIoModule.forRoot(config),
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

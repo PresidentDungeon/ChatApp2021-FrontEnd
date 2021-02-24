@@ -1,6 +1,5 @@
 import {
-  AfterContentInit,
-  AfterViewChecked, AfterViewInit,
+  AfterViewChecked,
   Component,
   ElementRef,
   HostListener,
@@ -14,6 +13,7 @@ import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {Message} from '../shared/message';
 import {RegisterService} from '../../register/shared/register.service';
 import {User} from '../../shared/user';
+import {faChevronCircleLeft, faPaperPlane} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-chat',
@@ -25,6 +25,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   @HostListener("window:beforeunload", ["$event"]) unloadHandler(event: Event) {
     this.ngOnDestroy();
   }
+
+  circleLeft = faChevronCircleLeft; faPaperPlane = faPaperPlane
 
   messageForm = new FormGroup({
     message: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),

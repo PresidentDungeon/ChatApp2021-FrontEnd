@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {RegisterService} from '../shared/register.service';
 import {User} from '../../shared/user';
 import {Subscription} from 'rxjs';
+import {faSignInAlt} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +12,8 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit, OnDestroy{
+
+  signInAlt = faSignInAlt
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
