@@ -5,6 +5,7 @@ import {SharedModule} from '../shared/shared.module';
 import {StockExchangeRoutingModule} from './stock-exchange-routing.module';
 import {FormsModule} from '@angular/forms';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 @NgModule({
@@ -14,7 +15,9 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     SharedModule,
     StockExchangeRoutingModule,
     FormsModule,
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    ModalModule.forRoot()
+
   ]
 })
 export class StockExchangeModule { }

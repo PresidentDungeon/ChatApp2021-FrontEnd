@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {StockService} from '../shared/stock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {Stock} from '../shared/stock';
 import {faChevronCircleLeft} from '@fortawesome/free-solid-svg-icons';
 import {Filter} from '../../shared/filter';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-stock',
@@ -16,9 +18,10 @@ export class StockComponent implements OnInit {
   circleLeft = faChevronCircleLeft;
   selectedStock: Stock;
 
-  updateForm = new FormGroup({
+  createForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
     description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),
+    price: new FormControl('', [Validators.required, Validators.min(0), Validators.maxLength(999999)]),
   });
 
   loading: boolean = true;
@@ -32,10 +35,26 @@ export class StockComponent implements OnInit {
 
   stock: Stock[];
 
-  constructor(private stockService: StockService) { }
+  modalRef: BsModalRef;
+  stockCreateLoading: boolean = false;
+  stockCreateError: string = '';
+
+
+
+  constructor(private stockService: StockService, private modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.getStock();
+
+    this.stockService.getCreateResponse().pipe(takeUntil(this.unsubscriber$)).
+      subscribe((data: any) => {
+        if(data.created){this.modalRef.hide(); this.stockCreateError = ''; this.createForm.reset();}
+        else{this.stockCreateError = data.errorMessage;}
+      this.stockCreateLoading = false;
+    })
+
+    this.stockService.listenForChange().pipe(takeUntil(this.unsubscriber$)).
+    subscribe(() => {console.log("Executed"); this.getStock();})
   }
 
 
@@ -53,6 +72,36 @@ export class StockComponent implements OnInit {
     console.log("Selected stock", stock);
     this.selectedStock = stock;
   }
+
+  createStock(): void{
+
+    this.stockCreateLoading = true;
+    const stockData = this.createForm.value;
+
+    const stock: Stock = {
+      id: 0,
+      name: stockData.name,
+      description: stockData.description,
+      currentStockPrice: stockData.price,
+      dailyStockPrice: stockData.price,
+      dailyTimestamp: new Date()
+    }
+
+    this.stockService.createStock(stock);
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
+
+
+
+
+
+
+
+
 
   itemsPrPageUpdate(): void{
     this.smallNumPages = Math.ceil(this.totalItems / this.itemsPrPage);

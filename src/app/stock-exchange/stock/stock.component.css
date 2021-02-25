@@ -72,3 +72,25 @@ table tr td
   margin-right: 12px;
 }
 
+.profile, .createView{
+  background-color: white;
+}
+
+#cancelButtonCreate{
+  margin-right: 10px;
+}
+
+#createButton:disabled{
+  cursor: not-allowed;
+  border: none;
+  background-color: rgba(96,96,96,0.20)
+}
+
+h6{
+  color: red;
+}
+
+input.ng-dirty.ng-invalid {
+  border: 1px solid red;
+}
+
