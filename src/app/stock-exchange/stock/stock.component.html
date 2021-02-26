@@ -77,8 +77,24 @@
               <div id="stockDesciption">
                 <p>{{selectedStock.description}}</p>
               </div>
+
+              <div class="col-md-6 offset-md-3 form-group" style="padding-top: 15px">
+                <div class="col text-center" style="">
+                  <label for="stockPriceUpdateTextarea">Stock price</label>
+                  <div class="input-group-append" >
+                    <input type="number" class="form-control" [formControl]="stockPriceControl" id="stockPriceUpdateTextarea" placeholder="Enter stock price" min="0" max="99999" [ngModel]="stockSelectedPrice" autocomplete="off">
+                    <button class="btn btn-outline-success confirmButton" type="submit" [disabled]="!stockPriceControl.valid || stockPriceControl.value === selectedStock.currentStockPrice" style="margin-left: 10px" (click)="updateStockMainWindow()"><fa-icon [icon]="accept"></fa-icon></button>
+                  </div>
+                  <h6 *ngIf="!stockPriceControl.valid" style="">Enter a valid price between 0-99999</h6>
+                </div>
+              </div>
+
             </div>
           </div>
+
+
+
+
         </div>
       </div>
     </div>
@@ -143,18 +159,18 @@
       <div class="form-group">
         <div class="col text-center">
           <label for="name">Stock name</label>
-          <input type="text" class="form-control" formControlName="name" id="name" placeholder="Enter stock name" minlength="1" maxlength="16">
+          <input type="text" class="form-control" formControlName="name" id="name" placeholder="Enter stock name" minlength="1" maxlength="16" pattern="^(?!.* {2})(?=\S)(?=.*\S$)[a-zA-Z æøåÆØÅ0-9 ]+$">
         </div>
 
         <div class="col text-center">
-          <h6 *ngIf="createForm.get('name').invalid && createForm.get('name').dirty">Stock must have a name</h6>
+          <h6 *ngIf="createForm.get('name').invalid && createForm.get('name').dirty">Stock name must be between 0-16 characters with no whitespace</h6>
         </div>
       </div>
 
       <div class="form-group">
         <div class="col text-center">
           <label for="description">Stock description</label>
-          <input type="text" class="form-control" formControlName="description" id="description" placeholder="Enter stock description" minlength="1" maxlength="300">
+          <input type="text" class="form-control" formControlName="description" id="description" placeholder="Enter stock description" minlength="1" maxlength="600">
         </div>
 
         <div class="col text-center">
@@ -200,18 +216,18 @@
       <div class="form-group">
         <div class="col text-center">
           <label for="nameUpdate">Stock name</label>
-          <input type="text" class="form-control" formControlName="name" id="nameUpdate" placeholder="Enter stock name" minlength="1" maxlength="16">
+          <input type="text" class="form-control" formControlName="name" id="nameUpdate" placeholder="Enter stock name" minlength="1" maxlength="16" pattern="^(?!.* {2})(?=\S)(?=.*\S$)[a-zA-Z æøåÆØÅ0-9 ]+$">
         </div>
 
         <div class="col text-center">
-          <h6 *ngIf="updateForm.get('name').invalid && updateForm.get('name').dirty">Stock must have a name</h6>
+          <h6 *ngIf="updateForm.get('name').invalid && updateForm.get('name').dirty">Stock name must be between 0-16 characters with no whitespace</h6>
         </div>
       </div>
 
       <div class="form-group">
         <div class="col text-center">
           <label for="descriptionUpdate">Stock description</label>
-          <input type="text" class="form-control" formControlName="description" id="descriptionUpdate" placeholder="Enter stock description" minlength="1" maxlength="300">
+          <input type="text" class="form-control" formControlName="description" id="descriptionUpdate" placeholder="Enter stock description" minlength="1" maxlength="600">
         </div>
 
         <div class="col text-center">
@@ -234,7 +250,7 @@
 
       <div class="col text-center">
         <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
-        <button class="btn btn-warning confirmButton" c type="submit" [disabled]="!updateForm.valid || stockUpdateLoading">Update</button>
+        <button class="btn btn-warning confirmButton" type="submit" [disabled]="!updateForm.valid || stockUpdateLoading">Update</button>
       </div>
 
     </form>

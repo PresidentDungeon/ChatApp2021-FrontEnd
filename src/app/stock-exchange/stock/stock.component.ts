@@ -3,7 +3,7 @@ import {StockService} from '../shared/stock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {Stock} from '../shared/stock';
-import {faChevronCircleLeft} from '@fortawesome/free-solid-svg-icons';
+import {faCheck, faChevronCircleLeft} from '@fortawesome/free-solid-svg-icons';
 import {Filter} from '../../shared/filter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {takeUntil} from 'rxjs/operators';
@@ -16,20 +16,24 @@ import {takeUntil} from 'rxjs/operators';
 export class StockComponent implements OnInit, OnDestroy {
 
   circleLeft = faChevronCircleLeft;
+  accept = faCheck;
   selectedStock: Stock;
 
   createForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
-    description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),
-    price: new FormControl('', [Validators.required, Validators.min(0), Validators.maxLength(999999)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(600)]),
+    price: new FormControl('', [Validators.required, Validators.min(0), Validators.max(99999)]),
   });
 
   updateForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
-    description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),
-    price: new FormControl('', [Validators.required, Validators.min(0), Validators.maxLength(999999)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(600)]),
+    price: new FormControl('', [Validators.required, Validators.min(0), Validators.max(99999)]),
   });
 
+  stockPriceControl = new FormControl('', [Validators.required, Validators.min(0), Validators.max(99999)])
+
+  stock: Stock[];
   loading: boolean = true;
   error: string = '';
   unsubscriber$ = new Subject();
@@ -39,18 +43,18 @@ export class StockComponent implements OnInit, OnDestroy {
   itemsPrPage: number = 10;
   smallNumPages: number = 0;
 
-  stock: Stock[];
-
   modalRef: BsModalRef;
   stockCreateLoading: boolean = false;
   stockCreateError: string = '';
   stockUpdateLoading: boolean = false;
   stockUpdateError: string = '';
+  stockUpdateFromMain: boolean = false;
   stockDeleteLoading: boolean = false;
   stockDeleteError: string = '';
   stockSelectedUpdated: boolean = false;
   stockSelectedDeleted: boolean = false;
   stockSelectedName: string = ''
+  stockSelectedPrice: number
 
 
   constructor(private stockService: StockService, private modalService: BsModalService) { }
@@ -67,9 +71,18 @@ export class StockComponent implements OnInit, OnDestroy {
 
     this.stockService.getUpdateResponse().pipe(takeUntil(this.unsubscriber$)).
     subscribe((data: any) => {
-      if(data.updated){this.modalRef.hide(); this.stockUpdateError = '';}
-      else{this.stockUpdateError = data.errorMessage;}
-      this.stockUpdateLoading = false;
+
+      if(this.stockUpdateFromMain){
+        if(data.updated){this.error = '';}
+        else{this.error = data.errorMessage;}
+        this.stockUpdateFromMain = false;
+      }
+      else{
+        if(data.updated){this.modalRef.hide(); this.stockUpdateError = '';}
+        else{this.stockUpdateError = data.errorMessage;}
+        this.stockUpdateLoading = false;
+      }
+
     })
 
     this.stockService.getDeleteResponse().pipe(takeUntil(this.unsubscriber$)).
@@ -106,6 +119,7 @@ export class StockComponent implements OnInit, OnDestroy {
 
   selectStock(stock: Stock){
     this.selectedStock = stock;
+    this.stockSelectedPrice = stock.currentStockPrice
     this.stockSelectedUpdated = false;
     this.stockSelectedDeleted = false;
   }
@@ -128,7 +142,6 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   updateStock(): void{
-
     this.stockUpdateLoading = true;
     const stockData = this.updateForm.value;
 
@@ -140,7 +153,19 @@ export class StockComponent implements OnInit, OnDestroy {
       dailyStockPrice: this.selectedStock.dailyStockPrice,
       dailyTimestamp: this.selectedStock.dailyTimestamp
     }
+    this.stockService.updateStock(stock);
+  }
 
+  updateStockMainWindow(): void{
+    const stock: Stock = {
+      id: this.selectedStock.id,
+      name: this.selectedStock.name,
+      description: this.selectedStock.description,
+      currentStockPrice: this.stockPriceControl.value,
+      dailyStockPrice: this.selectedStock.dailyStockPrice,
+      dailyTimestamp: this.selectedStock.dailyTimestamp
+    }
+    this.stockUpdateFromMain = true;
     this.stockService.updateStock(stock);
   }
 
@@ -166,12 +191,6 @@ export class StockComponent implements OnInit, OnDestroy {
     this.stockSelectedName = this.selectedStock.name;
     this.modalRef = this.modalService.show(template);
   }
-
-
-
-
-
-
 
   itemsPrPageUpdate(): void{
     this.smallNumPages = Math.ceil(this.totalItems / this.itemsPrPage);
