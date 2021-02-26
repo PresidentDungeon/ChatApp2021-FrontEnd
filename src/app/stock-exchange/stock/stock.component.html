@@ -31,7 +31,7 @@
           </button>
         </alert>
         <alert class="col-md-12" style="position: absolute;" type="success" *ngIf="stockDailyUpdate">
-          <strong>Selected stock got deleted</strong>
+          <strong>Daily stock update</strong>
           <button type="button" class="close pull-right" aria-label="Close" (click)="stockDailyUpdate = false">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -91,8 +91,8 @@
                 <div class="col text-center">
                   <label for="stockPriceUpdateTextarea">Stock price</label>
                   <div class="input-group-append" style="position: relative; left: 18px">
-                    <input type="number" class="form-control" [formControl]="stockPriceControl" id="stockPriceUpdateTextarea" placeholder="Enter stock price" min="0" max="99999" [ngModel]="stockSelectedPrice" autocomplete="off">
-                    <button class="btn btn-outline-success confirmButton" type="submit" [disabled]="!stockPriceControl.valid || stockPriceControl.value === selectedStock.currentStockPrice" style="margin-left: 10px" (click)="updateStockMainWindow()"><fa-icon [icon]="accept"></fa-icon></button>
+                    <input #input type="number" class="form-control" [formControl]="stockPriceControl" id="stockPriceUpdateTextarea" placeholder="Enter stock price" min="0" max="99999" autocomplete="off">
+                    <button class="btn btn-outline-success confirmButton" type="submit" [disabled]="!stockPriceControl.valid || stockPriceControl.value == selectedStock.currentStockPrice" style="margin-left: 10px" (click)="updateStockMainWindow()"><fa-icon [icon]="accept"></fa-icon></button>
                   </div>
                   <p style="font-size: 12px; color: blue; margin-bottom: 0px">Initial value ({{selectedStock.dailyTimestamp | date:'dd-MM-yyyy' : '-1'}}) = {{selectedStock.dailyStockPrice | currency: 'DKK '}}</p>
                   <h6 *ngIf="!stockPriceControl.valid" style="">Enter a valid price between 0-99999</h6>

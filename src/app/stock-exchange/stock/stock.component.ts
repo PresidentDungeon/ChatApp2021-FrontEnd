@@ -55,7 +55,6 @@ export class StockComponent implements OnInit, OnDestroy {
   stockSelectedDeleted: boolean = false;
   stockDailyUpdate: boolean = false;
   stockSelectedName: string = ''
-  stockSelectedPrice: number
 
 
   constructor(private stockService: StockService, private modalService: BsModalService) { }
@@ -104,7 +103,11 @@ export class StockComponent implements OnInit, OnDestroy {
     subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id === stock.id){this.selectedStock = undefined; this.stockSelectedUpdated = false; this.stockSelectedDeleted = true;}})
 
     this.stockService.listenForDailyUpdate().pipe(takeUntil(this.unsubscriber$)).
-    subscribe(() => {this.getStock(); this.stockDailyUpdate = true; if(this.selectedStock){this.selectedStock = this.stock.find((stock) => stock.id === this.selectedStock.id);}})
+    subscribe( () => {
+      this.getStock(); this.stockDailyUpdate = true;
+      if(this.selectedStock){
+        this.stockService.getStockByID(this.selectedStock.id).subscribe((stock) => {this.selectedStock = stock; this.stockPriceControl.setValue(stock.currentStockPrice)})
+      }})
 
   }
 
@@ -117,10 +120,8 @@ export class StockComponent implements OnInit, OnDestroy {
     this.stockService.verifyStockInitial();
   }
 
-  getStock(): void{
-
+  getStock(){
     const filter: Filter = {currentPage: this.currentPage, itemsPrPage: this.itemsPrPage}
-
     this.stockService.getStock(filter).subscribe((FilterList) => {
       this.totalItems = FilterList.totalItems;
       this.stock = FilterList.list;
@@ -129,7 +130,7 @@ export class StockComponent implements OnInit, OnDestroy {
 
   selectStock(stock: Stock){
     this.selectedStock = stock;
-    this.stockSelectedPrice = stock.currentStockPrice
+    this.stockPriceControl.setValue(stock.currentStockPrice)
     this.stockSelectedUpdated = false;
     this.stockSelectedDeleted = false;
   }
@@ -214,6 +215,5 @@ export class StockComponent implements OnInit, OnDestroy {
       this.getStock();
     }
   }
-
 
 }

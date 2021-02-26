@@ -18,6 +18,10 @@ export class StockService {
     return this.http.post<FilterList<Stock>>(environment.apiUrlStock + '/stock', filter);
   }
 
+  getStockByID(ID: number): Observable<Stock>{
+    return this.http.get<Stock>(environment.apiUrlStock + '/stock/?ID=' + ID);
+  }
+
   createStock(stock: Stock): void{
     this.socket.emit('createStock', stock);
   }
