@@ -23,6 +23,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </alert>
+
+      <alert class="col-md-10" style="position: relative; top: 13px;" type="danger" *ngIf="stockSelectedDeleted">
+        <strong>Selected stock got deleted</strong>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="stockSelectedDeleted = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </alert>
     </div>
 
 
@@ -79,9 +86,9 @@
     <div class="d-flex" id="btnArea">
       <button class="p-2 btn btn-info" id="goBackButton"><fa-icon [icon]="circleLeft"></fa-icon> Go back</button>
       <div class="col-md-3 offset-md-8 d-flex">
-        <button class="ml-auto p-2 btn btn-success btn-block" (click)="openModalCreate(createTemplate)">Add</button>
+        <button class="ml-auto p-2 btn btn-success btn-block" (click)="openModal(createTemplate)">Add</button>
         <button class="p-2 btn btn-warning btn-block" [disabled]="!selectedStock" (click)="openModalUpdate(updateTemplate)">Update</button>
-        <button class="p-2 btn btn-danger btn-block" [disabled]="!selectedStock">Delete</button>
+        <button class="p-2 btn btn-danger btn-block" [disabled]="!selectedStock" (click)="openModalDelete(deleteTemplate)">Delete</button>
       </div>
     </div>
 
@@ -166,7 +173,7 @@
         </div>
       </div>
 
-      <progressbar class="progress" *ngIf="stockCreateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
+      <progressbar class="progress" *ngIf="stockCreateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true" style="margin-bottom: 10px">Loading...</progressbar>
 
       <div class="col text-center">
         <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
@@ -223,7 +230,7 @@
         </div>
       </div>
 
-      <progressbar class="progress" *ngIf="stockUpdateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
+      <progressbar class="progress" *ngIf="stockUpdateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true" style="margin-bottom: 10px">Loading...</progressbar>
 
       <div class="col text-center">
         <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
@@ -231,5 +238,26 @@
       </div>
 
     </form>
+  </div>
+</ng-template>
+
+
+<ng-template #deleteTemplate>
+  <div  class="createView modal-header">
+    <h1 class="modal-title w-100 text-center"><b>Delete stock</b>?</h1>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="createView modal-body">
+    <h6 align="center">{{stockDeleteError}}</h6>
+    <p class="text-center">Are you sure, that you want to delete stock <b>{{stockSelectedName}}</b>?</p>
+    <progressbar class="progress" *ngIf="stockDeleteLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true" style="margin-bottom: 10px">Loading...</progressbar>
+    <div class="col text-center">
+      <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
+      <button class="btn btn-danger confirmButton" c type="submit" [disabled]="stockDeleteLoading" (click)="deleteStock()">Delete</button>
+    </div>
+
   </div>
 </ng-template>

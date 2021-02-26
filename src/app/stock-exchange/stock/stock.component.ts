@@ -46,7 +46,11 @@ export class StockComponent implements OnInit, OnDestroy {
   stockCreateError: string = '';
   stockUpdateLoading: boolean = false;
   stockUpdateError: string = '';
+  stockDeleteLoading: boolean = false;
+  stockDeleteError: string = '';
   stockSelectedUpdated: boolean = false;
+  stockSelectedDeleted: boolean = false;
+  stockSelectedName: string = ''
 
 
   constructor(private stockService: StockService, private modalService: BsModalService) { }
@@ -68,11 +72,21 @@ export class StockComponent implements OnInit, OnDestroy {
       this.stockUpdateLoading = false;
     })
 
+    this.stockService.getDeleteResponse().pipe(takeUntil(this.unsubscriber$)).
+    subscribe((data: any) => {
+      if(data.deleted){this.modalRef.hide(); this.stockDeleteError = '';}
+      else{this.stockDeleteError = data.errorMessage;}
+      this.stockDeleteLoading = false;
+    })
+
     this.stockService.listenForCreateChange().pipe(takeUntil(this.unsubscriber$)).
     subscribe(() => {this.getStock();})
 
     this.stockService.listenForUpdateChange().pipe(takeUntil(this.unsubscriber$)).
     subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id){this.selectedStock = stock; this.stockSelectedUpdated = true;}})
+
+    this.stockService.listenForDeleteChange().pipe(takeUntil(this.unsubscriber$)).
+    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id){this.selectedStock = undefined; this.stockSelectedUpdated = false; this.stockSelectedDeleted = true;}})
   }
 
   ngOnDestroy(): void {
@@ -92,6 +106,8 @@ export class StockComponent implements OnInit, OnDestroy {
 
   selectStock(stock: Stock){
     this.selectedStock = stock;
+    this.stockSelectedUpdated = false;
+    this.stockSelectedDeleted = false;
   }
 
   createStock(): void{
@@ -128,7 +144,12 @@ export class StockComponent implements OnInit, OnDestroy {
     this.stockService.updateStock(stock);
   }
 
-  openModalCreate(template: TemplateRef<any>) {
+  deleteStock(): void{
+    this.stockDeleteLoading = true;
+    this.stockService.deleteStock(this.selectedStock);
+  }
+
+  openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
 
@@ -141,7 +162,10 @@ export class StockComponent implements OnInit, OnDestroy {
     this.modalRef = this.modalService.show(template);
   }
 
-
+  openModalDelete(template: TemplateRef<any>) {
+    this.stockSelectedName = this.selectedStock.name;
+    this.modalRef = this.modalService.show(template);
+  }
 
 
 
