@@ -50,7 +50,6 @@ progressbar{
 
 #textArea{
   min-height: 650px;
-  background-color: white;
   padding-bottom: 0px;
 }
 
@@ -65,15 +64,11 @@ progressbar{
   margin-right: 12px;
 }
 
-.profile, .createView{
-  background-color: white;
-}
-
 #cancelButtonCreate{
   margin-right: 10px;
 }
 
-#createButton:disabled{
+Button:disabled{
   cursor: not-allowed;
   border: none;
   background-color: rgba(96,96,96,0.20)
@@ -94,6 +89,7 @@ input.ng-dirty.ng-invalid {
 
 .title{
   border-bottom: solid 2px #000000;
+  padding-right: 0px;
 }
 
 .stockTable{
@@ -103,4 +99,19 @@ input.ng-dirty.ng-invalid {
 #listingSelect{
   position: relative;
   left: -16px;
+}
+
+.vertical {
+  border-left: 2px solid black;
+  height: 650px;
+  position:absolute;
+  left: 50%;
+}
+
+#stockDesciption{
+  text-align: center;
+  max-height: 150px;
+  overflow-y: auto;
+  border-top: 2px solid rgba(91,91,91,0.11);;
+  border-bottom: 2px solid rgba(91,91,91,0.11);;
 }

@@ -69,7 +69,6 @@ export class StockComponent implements OnInit {
   }
 
   selectStock(stock: Stock){
-    console.log("Selected stock", stock);
     this.selectedStock = stock;
   }
 
