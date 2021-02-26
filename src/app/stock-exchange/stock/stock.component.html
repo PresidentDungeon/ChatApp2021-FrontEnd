@@ -1,13 +1,13 @@
 <div class="jumbotron">
 
-  <h1 align="center">Stock Exchange!</h1>
+
 
 
   <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
   <div class="container" *ngIf="!loading">
     <h6 id="errorMsg" align="center">{{error}}</h6>
 
-    <label class="col-md-2 offset-md-0">
+    <label class="col-md-2" id="listingSelect">
       Items pr. page:
       <select class="form-control" [(ngModel)]="itemsPrPage" (ngModelChange)="itemsPrPageUpdate()">
         <option value="10">10</option>
@@ -17,18 +17,37 @@
     </label>
 
 
-    <div class="container main-content">
+
+    <div class="container" id="mainWindow">
+
+      <div class="title">
+        <h1 align="center">Stock Exchange!</h1>
+      </div>
+
+      <div class="row title">
+        <div class="col-md-4 stockTable">
+          <h3 align="center">Stocks</h3>
+        </div>
+        <div class="col-md-8">
+          <h3 align="center">Selected Stock</h3>
+        </div>
+      </div>
+
       <div class="row">
-        <div class="col-md-4">
-          <table>
+        <div class="col-md-4 stockTable">
+          <table class="table">
+            <thead>
             <tr>
               <th scope="col">Stock name</th>
               <th scope="col">Stock price</th>
             </tr>
+            </thead>
+            <tbody>
             <tr class="data" *ngFor="let stockItem of stock" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
               <td>{{stockItem.name}}</td>
               <td id="price">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
             </tr>
+            </tbody>
           </table>
         </div>
 
@@ -39,6 +58,29 @@
             </div>
           </div>
         </div>
+      </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container main-content">
+      <div class="row">
+
       </div>
     </div>
 

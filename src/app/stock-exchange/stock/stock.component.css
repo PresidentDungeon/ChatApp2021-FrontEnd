@@ -7,10 +7,8 @@
 
 table {
   color: #000000;
-  border-top: solid 1px #020202;
-  border-left: solid 1px #020202;
-  border-bottom: solid 1px #020202;
   margin-bottom: 15px;
+  table-layout: fixed;
 }
 
 td, th {
@@ -18,7 +16,6 @@ td, th {
   padding: 15px;
   padding-right: 30px;
   color: #000000;
-  border-right: solid 1px #000000;
 }
 
 progressbar{
@@ -36,10 +33,6 @@ progressbar{
   background-color: rgba(146,143,142,0.8);
 }
 
-table tr td
-{
-  border-top: solid 2px #000000;
-}
 
 #price{
   color: #0d0d0d;
@@ -94,3 +87,20 @@ input.ng-dirty.ng-invalid {
   border: 1px solid red;
 }
 
+
+#mainWindow{
+  border: solid 2px #000000;
+}
+
+.title{
+  border-bottom: solid 2px #000000;
+}
+
+.stockTable{
+  border-right: solid 2px #000000;
+}
+
+#listingSelect{
+  position: relative;
+  left: -16px;
+}
