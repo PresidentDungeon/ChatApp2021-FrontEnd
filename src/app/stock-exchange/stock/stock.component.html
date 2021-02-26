@@ -17,19 +17,26 @@
         </select>
       </label>
 
-      <alert class="col-md-10" style="position: relative; top: 13px;" type="info" *ngIf="stockSelectedUpdated">
-        <strong>Selected stock just updated</strong>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="stockSelectedUpdated = false">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </alert>
-
-      <alert class="col-md-10" style="position: relative; top: 13px;" type="danger" *ngIf="stockSelectedDeleted">
-        <strong>Selected stock got deleted</strong>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="stockSelectedDeleted = false">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </alert>
+      <div class="col-md-10" style="position: relative; top: 13px; right: 15px;">
+        <alert class="col-md-12" style="position: absolute;" type="info" *ngIf="stockSelectedUpdated">
+          <strong>Selected stock just updated</strong>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="stockSelectedUpdated = false">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </alert>
+        <alert class="col-md-12" style="position: absolute;" type="danger" *ngIf="stockSelectedDeleted">
+          <strong>Selected stock got deleted</strong>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="stockSelectedDeleted = false">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </alert>
+        <alert class="col-md-12" style="position: absolute;" type="success" *ngIf="stockDailyUpdate">
+          <strong>Selected stock got deleted</strong>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="stockDailyUpdate = false">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </alert>
+      </div>
     </div>
 
 

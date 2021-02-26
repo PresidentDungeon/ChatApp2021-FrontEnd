@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, LOCALE_ID, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {StockService} from '../shared/stock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -53,6 +53,7 @@ export class StockComponent implements OnInit, OnDestroy {
   stockDeleteError: string = '';
   stockSelectedUpdated: boolean = false;
   stockSelectedDeleted: boolean = false;
+  stockDailyUpdate: boolean = false;
   stockSelectedName: string = ''
   stockSelectedPrice: number
 
@@ -60,7 +61,8 @@ export class StockComponent implements OnInit, OnDestroy {
   constructor(private stockService: StockService, private modalService: BsModalService) { }
 
   ngOnInit(): void {
-    this.getStock();
+
+    this.initialLoad();
 
     this.stockService.getCreateResponse().pipe(takeUntil(this.unsubscriber$)).
       subscribe((data: any) => {
@@ -96,15 +98,23 @@ export class StockComponent implements OnInit, OnDestroy {
     subscribe(() => {this.getStock();})
 
     this.stockService.listenForUpdateChange().pipe(takeUntil(this.unsubscriber$)).
-    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id){this.selectedStock = stock; this.stockSelectedUpdated = true;}})
+    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id === stock.id){this.selectedStock = stock; this.stockSelectedUpdated = true; this.stockPriceControl.setValue(stock.currentStockPrice)}})
 
     this.stockService.listenForDeleteChange().pipe(takeUntil(this.unsubscriber$)).
-    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id){this.selectedStock = undefined; this.stockSelectedUpdated = false; this.stockSelectedDeleted = true;}})
+    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id === stock.id){this.selectedStock = undefined; this.stockSelectedUpdated = false; this.stockSelectedDeleted = true;}})
+
+    this.stockService.listenForDailyUpdate().pipe(takeUntil(this.unsubscriber$)).
+    subscribe(() => {this.getStock(); this.stockDailyUpdate = true; if(this.selectedStock){this.selectedStock = this.stock.find((stock) => stock.id === this.selectedStock.id);}})
+
   }
 
   ngOnDestroy(): void {
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
+  }
+
+  initialLoad(): void{
+    this.stockService.verifyStockInitial();
   }
 
   getStock(): void{

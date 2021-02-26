@@ -30,6 +30,10 @@ export class StockService {
     this.socket.emit('deleteStock', stock);
   }
 
+  verifyStockInitial(): void{
+    this.socket.emit('verifyStockInitial');
+  }
+
   getCreateResponse(): Observable<any>{
     return this.socket.fromEvent<any>('createResponse');
   }
@@ -52,6 +56,10 @@ export class StockService {
 
   listenForDeleteChange(): Observable<Stock>{
     return this.socket.fromEvent<Stock>('stockDeleteChanged');
+  }
+
+  listenForDailyUpdate(): Observable<any>{
+    return this.socket.fromEvent<any>('stockDailyUpdate');
   }
 
 }
