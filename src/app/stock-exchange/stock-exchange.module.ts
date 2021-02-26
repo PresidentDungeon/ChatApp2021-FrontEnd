@@ -6,6 +6,7 @@ import {StockExchangeRoutingModule} from './stock-exchange-routing.module';
 import {FormsModule} from '@angular/forms';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 
 @NgModule({
@@ -16,7 +17,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     StockExchangeRoutingModule,
     FormsModule,
     PaginationModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    AlertModule.forRoot()
+
 
   ]
 })

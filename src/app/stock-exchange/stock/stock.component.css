@@ -64,7 +64,7 @@ progressbar{
   margin-right: 12px;
 }
 
-#cancelButtonCreate{
+.cancelButton{
   margin-right: 10px;
 }
 
@@ -94,11 +94,6 @@ input.ng-dirty.ng-invalid {
 
 .stockTable{
   border-right: solid 2px #000000;
-}
-
-#listingSelect{
-  position: relative;
-  left: -16px;
 }
 
 .vertical {

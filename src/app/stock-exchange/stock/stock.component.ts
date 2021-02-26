@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {StockService} from '../shared/stock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -13,12 +13,18 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.css']
 })
-export class StockComponent implements OnInit {
+export class StockComponent implements OnInit, OnDestroy {
 
   circleLeft = faChevronCircleLeft;
   selectedStock: Stock;
 
   createForm = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
+    description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),
+    price: new FormControl('', [Validators.required, Validators.min(0), Validators.maxLength(999999)]),
+  });
+
+  updateForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
     description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(300)]),
     price: new FormControl('', [Validators.required, Validators.min(0), Validators.maxLength(999999)]),
@@ -38,7 +44,9 @@ export class StockComponent implements OnInit {
   modalRef: BsModalRef;
   stockCreateLoading: boolean = false;
   stockCreateError: string = '';
-
+  stockUpdateLoading: boolean = false;
+  stockUpdateError: string = '';
+  stockSelectedUpdated: boolean = false;
 
 
   constructor(private stockService: StockService, private modalService: BsModalService) { }
@@ -53,10 +61,24 @@ export class StockComponent implements OnInit {
       this.stockCreateLoading = false;
     })
 
-    this.stockService.listenForChange().pipe(takeUntil(this.unsubscriber$)).
-    subscribe(() => {console.log("Executed"); this.getStock();})
+    this.stockService.getUpdateResponse().pipe(takeUntil(this.unsubscriber$)).
+    subscribe((data: any) => {
+      if(data.updated){this.modalRef.hide(); this.stockUpdateError = '';}
+      else{this.stockUpdateError = data.errorMessage;}
+      this.stockUpdateLoading = false;
+    })
+
+    this.stockService.listenForCreateChange().pipe(takeUntil(this.unsubscriber$)).
+    subscribe(() => {this.getStock();})
+
+    this.stockService.listenForUpdateChange().pipe(takeUntil(this.unsubscriber$)).
+    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id){this.selectedStock = stock; this.stockSelectedUpdated = true;}})
   }
 
+  ngOnDestroy(): void {
+    this.unsubscriber$.next();
+    this.unsubscriber$.complete();
+  }
 
   getStock(): void{
 
@@ -89,10 +111,35 @@ export class StockComponent implements OnInit {
     this.stockService.createStock(stock);
   }
 
-  openModal(template: TemplateRef<any>) {
+  updateStock(): void{
+
+    this.stockUpdateLoading = true;
+    const stockData = this.updateForm.value;
+
+    const stock: Stock = {
+      id: this.selectedStock.id,
+      name: stockData.name,
+      description: stockData.description,
+      currentStockPrice: stockData.price,
+      dailyStockPrice: this.selectedStock.dailyStockPrice,
+      dailyTimestamp: this.selectedStock.dailyTimestamp
+    }
+
+    this.stockService.updateStock(stock);
+  }
+
+  openModalCreate(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
 
+  openModalUpdate(template: TemplateRef<any>) {
+    this.updateForm.patchValue({
+      name: this.selectedStock.name,
+      description: this.selectedStock.description,
+      price: this.selectedStock.currentStockPrice
+    });
+    this.modalRef = this.modalService.show(template);
+  }
 
 
 

@@ -24,12 +24,24 @@ export class StockService {
     this.socket.emit('createStock', stock);
   }
 
+  updateStock(stock: Stock): void{
+    this.socket.emit('updateStock', stock);
+  }
+
   getCreateResponse(): Observable<any>{
     return this.socket.fromEvent<any>('createResponse');
   }
 
-  listenForChange(): Observable<any>{
-    return this.socket.fromEvent<any>('stockChanged');
+  getUpdateResponse(): Observable<any>{
+    return this.socket.fromEvent<any>('updateResponse');
+  }
+
+  listenForCreateChange(): Observable<any>{
+    return this.socket.fromEvent<any>('stockCreateChanged');
+  }
+
+  listenForUpdateChange(): Observable<Stock>{
+    return this.socket.fromEvent<Stock>('stockUpdateChanged');
   }
 
 }

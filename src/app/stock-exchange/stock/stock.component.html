@@ -7,14 +7,24 @@
   <div class="container" *ngIf="!loading">
     <h6 id="errorMsg" align="center">{{error}}</h6>
 
-    <label class="col-md-2" id="listingSelect">
-      Items pr. page:
-      <select class="form-control" [(ngModel)]="itemsPrPage" (ngModelChange)="itemsPrPageUpdate()">
-        <option value="10">10</option>
-        <option value="25">25</option>
-        <option value="50">50</option>
-      </select>
-    </label>
+    <div class="row">
+      <label class="col-md-2" id="listingSelect">
+        Items pr. page:
+        <select class="form-control" [(ngModel)]="itemsPrPage" (ngModelChange)="itemsPrPageUpdate()">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </label>
+
+      <alert class="col-md-10" style="position: relative; top: 13px;" type="info" *ngIf="stockSelectedUpdated">
+        <strong>Selected stock just updated</strong>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="stockSelectedUpdated = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </alert>
+    </div>
+
 
 
 
@@ -56,7 +66,7 @@
         <div class="col-md-8">
           <div id="textArea">
             <div *ngIf="selectedStock">
-              <h3 align="center" style="margin-top: 15px">{{selectedStock.name}}</h3>
+              <h3 align="center" style="padding-top: 15px">{{selectedStock.name}}</h3>
               <div id="stockDesciption">
                 <p>{{selectedStock.description}}</p>
               </div>
@@ -69,8 +79,8 @@
     <div class="d-flex" id="btnArea">
       <button class="p-2 btn btn-info" id="goBackButton"><fa-icon [icon]="circleLeft"></fa-icon> Go back</button>
       <div class="col-md-3 offset-md-8 d-flex">
-        <button class="ml-auto p-2 btn btn-success btn-block" (click)="openModal(createTemplate)">Add</button>
-        <button class="p-2 btn btn-warning btn-block" [disabled]="!selectedStock">Update</button>
+        <button class="ml-auto p-2 btn btn-success btn-block" (click)="openModalCreate(createTemplate)">Add</button>
+        <button class="p-2 btn btn-warning btn-block" [disabled]="!selectedStock" (click)="openModalUpdate(updateTemplate)">Update</button>
         <button class="p-2 btn btn-danger btn-block" [disabled]="!selectedStock">Delete</button>
       </div>
     </div>
@@ -159,8 +169,65 @@
       <progressbar class="progress" *ngIf="stockCreateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
 
       <div class="col text-center">
-        <button (click)="modalRef.hide();" id="cancelButtonCreate" type="button" class="btn btn-secondary" >Cancel</button>
-        <button class="btn btn-success" id="createButton" type="submit" [disabled]="!createForm.valid || stockCreateLoading">Create</button>
+        <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
+        <button class="btn btn-success confirmButton" type="submit" [disabled]="!createForm.valid || stockCreateLoading">Create</button>
+      </div>
+
+    </form>
+  </div>
+</ng-template>
+
+
+<ng-template #updateTemplate>
+  <div  class="createView modal-header">
+    <h1 class="modal-title w-100 text-center"><b>Update stock {{selectedStock.name}}</b>?</h1>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="createView modal-body">
+    <h6 align="center">{{stockUpdateError}}</h6>
+    <form [formGroup]="updateForm" (ngSubmit)="updateStock()">
+
+      <div class="form-group">
+        <div class="col text-center">
+          <label for="nameUpdate">Stock name</label>
+          <input type="text" class="form-control" formControlName="name" id="nameUpdate" placeholder="Enter stock name" minlength="1" maxlength="16">
+        </div>
+
+        <div class="col text-center">
+          <h6 *ngIf="updateForm.get('name').invalid && updateForm.get('name').dirty">Stock must have a name</h6>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col text-center">
+          <label for="descriptionUpdate">Stock description</label>
+          <input type="text" class="form-control" formControlName="description" id="descriptionUpdate" placeholder="Enter stock description" minlength="1" maxlength="300">
+        </div>
+
+        <div class="col text-center">
+          <h6 *ngIf="updateForm.get('description').invalid && updateForm.get('description').dirty">A description must be entered</h6>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col text-center">
+          <label for="stockPriceUpdate">Stock price</label>
+          <input type="number" class="form-control" formControlName="price" id="stockPriceUpdate" placeholder="Enter stock price" min="0" max="99999">
+        </div>
+
+        <div class="col text-center">
+          <h6 *ngIf="updateForm.get('price').invalid && updateForm.get('price').dirty">Enter a valid price between 0-99999</h6>
+        </div>
+      </div>
+
+      <progressbar class="progress" *ngIf="stockUpdateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
+
+      <div class="col text-center">
+        <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
+        <button class="btn btn-warning confirmButton" c type="submit" [disabled]="!updateForm.valid || stockUpdateLoading">Update</button>
       </div>
 
     </form>
