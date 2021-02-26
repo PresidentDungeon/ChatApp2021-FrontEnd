@@ -8,12 +8,13 @@ import {
 } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ChatService} from '../shared/chat.service';
-import {Subject, Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
 import {debounceTime, takeUntil, tap} from 'rxjs/operators';
 import {Message} from '../shared/message';
 import {RegisterService} from '../../register/shared/register.service';
 import {User} from '../../shared/user';
 import {faChevronCircleLeft, faPaperPlane} from '@fortawesome/free-solid-svg-icons';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-chat',
@@ -43,7 +44,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
 
    unsubscriber$ = new Subject();
 
-  constructor(private chatService: ChatService, private registerService: RegisterService, private elementRef : ElementRef) { }
+  constructor(private chatService: ChatService, private registerService: RegisterService,
+              private elementRef: ElementRef, private location: Location) { }
 
   ngOnInit(): void {
 
@@ -141,5 +143,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
       if(numberCount === size - 2 || numberCount === maxSize - 2){text += " & ";}
       else{text += ", ";}
     }
+  }
+
+  goBack(): void{
+    this.location.back();
   }
 }

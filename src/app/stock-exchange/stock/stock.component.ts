@@ -7,6 +7,7 @@ import {faCheck, faChevronCircleLeft} from '@fortawesome/free-solid-svg-icons';
 import {Filter} from '../../shared/filter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {takeUntil} from 'rxjs/operators';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-stock',
@@ -57,7 +58,8 @@ export class StockComponent implements OnInit, OnDestroy {
   stockSelectedName: string = ''
 
 
-  constructor(private stockService: StockService, private modalService: BsModalService) { }
+  constructor(private stockService: StockService, private modalService: BsModalService,
+              private location: Location) { }
 
   ngOnInit(): void {
 
@@ -214,6 +216,10 @@ export class StockComponent implements OnInit, OnDestroy {
       this.currentPage = $event.page;
       this.getStock();
     }
+  }
+
+  goBack(): void{
+    this.location.back();
   }
 
 }
