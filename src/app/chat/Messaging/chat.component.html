@@ -20,7 +20,7 @@
                     <p *ngIf="!message.isSystemInfo" class="col" id="chatText"><b>{{message.user.username}}: </b> {{message.message}}</p>
                   </li>
                   <li>
-                    <p *ngIf="!message.isSystemInfo" class="" id="dateText">({{message.timestamp | date:'short'}})</p>
+                    <p *ngIf="!message.isSystemInfo" id="dateText">({{message.timestamp | date:'dd-MM-yyyy HH:mm' : '-1'}})</p>
                     <p *ngIf="message.isSystemInfo" class="info" align="center">{{message.message}}</p>
                   </li>
                 </ul>

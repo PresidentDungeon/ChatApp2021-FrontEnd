@@ -64,7 +64,9 @@
             <tbody>
             <tr class="data" *ngFor="let stockItem of stock" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
               <td>{{stockItem.name}}</td>
-              <td id="price">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+              <td *ngIf="stockItem.currentStockPrice === stockItem.dailyStockPrice" style="color: black">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+              <td *ngIf="stockItem.currentStockPrice > stockItem.dailyStockPrice" style="color: green">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+              <td *ngIf="stockItem.currentStockPrice < stockItem.dailyStockPrice" style="color: red">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
             </tr>
             </tbody>
           </table>
@@ -79,12 +81,13 @@
               </div>
 
               <div class="col-md-6 offset-md-3 form-group" style="padding-top: 15px">
-                <div class="col text-center" style="">
+                <div class="col text-center">
                   <label for="stockPriceUpdateTextarea">Stock price</label>
-                  <div class="input-group-append" >
+                  <div class="input-group-append" style="position: relative; left: 18px">
                     <input type="number" class="form-control" [formControl]="stockPriceControl" id="stockPriceUpdateTextarea" placeholder="Enter stock price" min="0" max="99999" [ngModel]="stockSelectedPrice" autocomplete="off">
                     <button class="btn btn-outline-success confirmButton" type="submit" [disabled]="!stockPriceControl.valid || stockPriceControl.value === selectedStock.currentStockPrice" style="margin-left: 10px" (click)="updateStockMainWindow()"><fa-icon [icon]="accept"></fa-icon></button>
                   </div>
+                  <p style="font-size: 12px; color: blue; margin-bottom: 0px">Initial value ({{selectedStock.dailyTimestamp | date:'dd-MM-yyyy' : '-1'}}) = {{selectedStock.dailyStockPrice | currency: 'DKK '}}</p>
                   <h6 *ngIf="!stockPriceControl.valid" style="">Enter a valid price between 0-99999</h6>
                 </div>
               </div>
@@ -136,10 +139,6 @@
     </div>
   </div>
 </div>
-
-
-
-
 
 
 
