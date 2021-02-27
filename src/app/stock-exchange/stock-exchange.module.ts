@@ -24,3 +24,4 @@ import { AlertModule } from 'ngx-bootstrap/alert';
   ]
 })
 export class StockExchangeModule { }
+

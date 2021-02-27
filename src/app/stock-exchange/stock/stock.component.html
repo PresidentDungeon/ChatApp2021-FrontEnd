@@ -71,9 +71,9 @@
             <tbody>
             <tr class="data" *ngFor="let stockItem of stock" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
               <td>{{stockItem.name}}</td>
-              <td *ngIf="stockItem.currentStockPrice === stockItem.dailyStockPrice" style="color: black">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
-              <td *ngIf="stockItem.currentStockPrice > stockItem.dailyStockPrice" style="color: green">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
-              <td *ngIf="stockItem.currentStockPrice < stockItem.dailyStockPrice" style="color: red">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+              <td *ngIf="+stockItem.currentStockPrice === +stockItem.dailyStockPrice" style="color: black">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+              <td *ngIf="+stockItem.currentStockPrice > +stockItem.dailyStockPrice" style="color: green">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
+              <td *ngIf="+stockItem.currentStockPrice < +stockItem.dailyStockPrice" style="color: red">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
             </tr>
             </tbody>
           </table>
@@ -109,7 +109,7 @@
       <div class="col-md-3 offset-md-8 d-flex">
         <button class="ml-auto p-2 btn btn-success btn-block" (click)="openModal(createTemplate)">Add</button>
         <button class="p-2 btn btn-warning btn-block" [disabled]="!selectedStock" (click)="openModalUpdate(updateTemplate)">Update</button>
-        <button class="p-2 btn btn-danger btn-block" [disabled]="!selectedStock" (click)="openModalDelete(deleteTemplate)">Delete</button>
+        <button class="p-2 btn btn-danger btn-block" [disabled]="!selectedStock" (click)="openModal(deleteTemplate)">Delete</button>
       </div>
     </div>
 

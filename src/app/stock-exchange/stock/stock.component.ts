@@ -85,7 +85,6 @@ export class StockComponent implements OnInit, OnDestroy {
         else{this.stockUpdateError = data.errorMessage;}
         this.stockUpdateLoading = false;
       }
-
     })
 
     this.stockService.getDeleteResponse().pipe(takeUntil(this.unsubscriber$)).
@@ -188,6 +187,7 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   openModal(template: TemplateRef<any>) {
+    this.stockSelectedName = this.selectedStock.name;
     this.modalRef = this.modalService.show(template);
   }
 
@@ -197,11 +197,6 @@ export class StockComponent implements OnInit, OnDestroy {
       description: this.selectedStock.description,
       price: this.selectedStock.currentStockPrice
     });
-    this.modalRef = this.modalService.show(template);
-  }
-
-  openModalDelete(template: TemplateRef<any>) {
-    this.stockSelectedName = this.selectedStock.name;
     this.modalRef = this.modalService.show(template);
   }
 
