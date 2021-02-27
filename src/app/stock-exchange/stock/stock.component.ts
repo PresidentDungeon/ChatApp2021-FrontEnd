@@ -85,11 +85,12 @@ export class StockComponent implements OnInit, OnDestroy {
         else{this.stockUpdateError = data.errorMessage;}
         this.stockUpdateLoading = false;
       }
+      if(data.updated){this.getStock(); if(this.selectedStock && this.selectedStock.id === data.stock.id){this.selectedStock = data.stock; this.stockPriceControl.setValue(data.stock.currentStockPrice);}}
     })
 
     this.stockService.getDeleteResponse().pipe(takeUntil(this.unsubscriber$)).
     subscribe((data: any) => {
-      if(data.deleted){this.modalRef.hide(); this.stockDeleteError = '';}
+      if(data.deleted){this.modalRef.hide(); this.stockDeleteError = ''; this.getStock(); if(this.selectedStock.id === data.stock.id){this.selectedStock = undefined;}}
       else{this.stockDeleteError = data.errorMessage;}
       this.stockDeleteLoading = false;
     })
@@ -101,7 +102,7 @@ export class StockComponent implements OnInit, OnDestroy {
     subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id === stock.id){this.selectedStock = stock; this.stockSelectedUpdated = true; this.stockPriceControl.setValue(stock.currentStockPrice)}})
 
     this.stockService.listenForDeleteChange().pipe(takeUntil(this.unsubscriber$)).
-    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id === stock.id){this.selectedStock = undefined; this.stockSelectedUpdated = false; this.stockSelectedDeleted = true;}})
+    subscribe((stock) => {this.getStock(); if(this.selectedStock && this.selectedStock.id === stock.id){this.selectedStock = undefined; this.stockSelectedDeleted = true;}})
 
     this.stockService.listenForDailyUpdate().pipe(takeUntil(this.unsubscriber$)).
     subscribe( () => {
@@ -187,7 +188,7 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   openModal(template: TemplateRef<any>) {
-    this.stockSelectedName = this.selectedStock.name;
+    this.stockSelectedName = this.selectedStock?.name;
     this.modalRef = this.modalService.show(template);
   }
 
