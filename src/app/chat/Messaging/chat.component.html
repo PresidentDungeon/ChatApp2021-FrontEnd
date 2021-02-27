@@ -1,6 +1,16 @@
  <div class="jumbotron">
 
-   <h1 align="center">Server ({{joinedUser.room}})</h1>
+
+   <div class="container">
+     <div class="col-md-10">
+       <h1 align="center">Server ({{joinedUser.room}})</h1>
+     </div>
+   </div>
+
+
+
+
+
     <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
     <div class="container" *ngIf="!loading">
       <h6 id="errorMsg" align="center">{{error}}</h6>
@@ -13,11 +23,11 @@
 
           <div id="textArea">
             <section *ngFor="let message of messages">
-              <div class="row" id="test">
+              <div class="row">
                 <img *ngIf="!message.isSystemInfo" id="chatImage" class="col" src="https://i.imgur.com/Nsm95z7.png">
                 <ul class="col">
                   <li>
-                    <p *ngIf="!message.isSystemInfo" class="col" id="chatText"><b>{{message.user.username}}: </b> {{message.message}}</p>
+                    <p *ngIf="!message.isSystemInfo" class="col" id="chatText"><b>{{message.user.username}}:</b> {{message.message}}</p>
                   </li>
                   <li>
                     <p *ngIf="!message.isSystemInfo" id="dateText">({{message.timestamp | date:'dd-MM-yyyy HH:mm' : '-1'}})</p>

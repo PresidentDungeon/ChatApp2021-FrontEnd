@@ -13,8 +13,9 @@
         </div>
 
         <div class="col-sm-8 offset-sm-4">
-          <h6 id="error" *ngIf="registerForm.get('name').invalid && registerForm.get('name').dirty">Name must be between 0-16 characters with no whitespace</h6>
-          <h6 *ngIf="registerForm.get('name').value === '' && !registerForm.get('name').dirty || registerForm.get('name').valid">⠀</h6>
+          <div style="padding-top: 4px; min-height: 13px; max-height: 13px">
+            <h6 class="warning-color" *ngIf="registerForm.get('name').invalid && registerForm.get('name').dirty">Name must be between 0-16 characters with no whitespace</h6>
+          </div>
         </div>
       </div>
 

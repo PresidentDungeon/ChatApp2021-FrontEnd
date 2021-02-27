@@ -39,11 +39,12 @@ form button{;
 form button:disabled{
   cursor: not-allowed;
   border: none;
-  background-color: rgba(96,96,96,0.20)
+  background-color: rgba(96,96,96,0.20);
+  height: 50px;
 }
 
 h6{
-  color: black;
+  color: red;
 }
 
 input.ng-dirty.ng-invalid {
