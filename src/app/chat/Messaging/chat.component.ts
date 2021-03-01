@@ -60,7 +60,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
       this.typingUsers = users;
     })
 
-    this.messageForm.get('message').valueChanges.pipe(
+    this.messageForm.get('message').valueChanges.pipe(takeUntil(this.unsubscriber$),
         tap(value => this.checkTyping(true)),
         debounceTime(5000))
       .subscribe(value => {this.checkTyping(false);});
@@ -75,7 +75,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   }
 
   ngOnDestroy(): void {
-
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
 
