@@ -11,9 +11,9 @@
       <label class="col-md-2" id="listingSelect">
         Items pr. page:
         <select class="form-control" [(ngModel)]="itemsPrPage" (ngModelChange)="itemsPrPageUpdate()">
-          <option value="10">10</option>
-          <option value="25">25</option>
-          <option value="50">50</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="25">25</option>
+          <option [ngValue]="50">50</option>
         </select>
       </label>
 

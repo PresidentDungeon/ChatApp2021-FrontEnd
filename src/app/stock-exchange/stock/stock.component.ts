@@ -143,7 +143,7 @@ export class StockComponent implements OnInit, OnDestroy {
     const stockData = this.createForm.value;
 
     const stock: Stock = {
-      id: 0,
+      id: '',
       name: stockData.name,
       description: stockData.description,
       currentStockPrice: stockData.price,

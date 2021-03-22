@@ -93,7 +93,8 @@ input.ng-dirty.ng-invalid {
 
 .vertical {
   border-left: 2px solid black;
-  height: 650px;
+  pointer-events: none;
+  height: 100%;
   position:absolute;
   left: 50%;
 }
@@ -105,3 +106,5 @@ input.ng-dirty.ng-invalid {
   border-top: 2px solid rgba(91,91,91,0.11);;
   border-bottom: 2px solid rgba(91,91,91,0.11);;
 }
+
+
