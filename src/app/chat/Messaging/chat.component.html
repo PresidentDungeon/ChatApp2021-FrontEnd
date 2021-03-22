@@ -25,7 +25,7 @@
             <section *ngFor="let message of messages">
               <div class="row">
                 <img *ngIf="!message.isSystemInfo" id="chatImage" class="col" src="https://i.imgur.com/Nsm95z7.png">
-                <ul class="col">
+                <ul class="col" style="list-style: none">
                   <li>
                     <p *ngIf="!message.isSystemInfo" class="col" id="chatText"><b>{{message.user.username}}:</b> {{message.message}}</p>
                   </li>

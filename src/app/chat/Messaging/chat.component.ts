@@ -65,9 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
         debounceTime(5000))
       .subscribe(value => {this.checkTyping(false);});
 
-    this.chatService.getAllMessages(this.registerService.user).subscribe((messages) => {this.messages = messages;},
-      () => {this.loading = false;},
-      () => {this.loading = false; })
+    this.chatService.getAllMessages(this.registerService.user).subscribe((messages) => {this.messages = messages; this.loading = false;})
 
     this.chatService.isOnActiveChat = true;
     this.chatService.newMessages = 0;
@@ -89,6 +87,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
   sendMessage(): void{
     const messageData = this.messageForm.value;
     let messageString: string = messageData.message;
+    this.messageForm.get('message').reset();
 
     let date = new Date();
     date.setTime(date.getTime() + 2*60*60*1000);
@@ -100,7 +99,6 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked{
       isSystemInfo: false
     }
 
-    this.messageForm.get('message').reset();
     this.isTyping = false;
     this.chatService.sendTypingStatus(this.registerService.user, this.isTyping);
 
