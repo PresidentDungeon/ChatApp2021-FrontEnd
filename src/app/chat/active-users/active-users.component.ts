@@ -4,6 +4,8 @@ import {ChatService} from '../shared/chat.service';
 import {RegisterService} from '../../register/shared/register.service';
 import {User} from '../../shared/user';
 import {take, takeUntil} from 'rxjs/operators';
+import {Select} from '@ngxs/store';
+import {ChatState} from '../state/chat.state';
 
 @Component({
   selector: 'app-active-users',

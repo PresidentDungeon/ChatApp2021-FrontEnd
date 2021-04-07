@@ -4,7 +4,7 @@
       <li class="nav-bar-route"><a routerLink=""><b>Home</b></a></li>
       <li class="nav-bar-route"><a routerLink="/chats"><b>Live Chat</b></a></li>
       <li class="nav-bar-route"><a routerLink="/stock-exchange"><b>Stock Exchange</b></a></li>
-      <li id="onlineUsers"><b>Online users: {{onlineUsers}}</b></li>
+      <li id="onlineUsers"><b>Online users: {{clients$ | async}}</b></li>
       <li id="newMessages" *ngIf="this.getMessages() > 0"><b>Messages +{{this.getMessages()}}</b></li>
     </ul>
   </div>

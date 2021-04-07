@@ -7,6 +7,10 @@ import {Socket, SocketIoModule} from 'ngx-socket-io';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HttpClientModule} from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {NgxsModule} from '@ngxs/store';
+import {environment} from '../environments/environment';
+import {ChatState} from './chat/state/chat.state';
+import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
 
 @NgModule({
   declarations: [
@@ -19,6 +23,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     AppRoutingModule,
     SocketIoModule.forRoot({url: ''}),
     FontAwesomeModule,
+    NgxsModule.forRoot([ChatState], {
+      developmentMode: !environment.production
+    }),
+    NgxsLoggerPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
