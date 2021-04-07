@@ -26,7 +26,7 @@ import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
     NgxsModule.forRoot([ChatState], {
       developmentMode: !environment.production
     }),
-    NgxsLoggerPluginModule.forRoot()
+    // NgxsLoggerPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

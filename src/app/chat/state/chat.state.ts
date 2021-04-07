@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {User} from '../../shared/user';
-import {GetOnlineAmount, ListenForOnlineAmount, StopListeningForOnlineAmount, UpdateOnlineAmount} from './chat.actions';
+import {
+  GetOnlineAmount, GetOnlineUsers,
+  ListenForOnlineAmount,
+  ListenForRegisterAndUnregister,
+  StopListeningForOnlineAmount, StopListeningForRegisterAndUnregister, UpdateOnline,
+  UpdateOnlineAmount, UpdateUserRegister, UpdateUserUnregister
+} from './chat.actions';
 import {Subscription} from 'rxjs';
 import {RegisterService} from '../../register/shared/register.service';
 
@@ -23,12 +29,16 @@ export interface ChatStateModel{
 @Injectable()
 export class ChatState {
 
-  public isRegistered: Boolean = false;
   private clientsOnlineUnsub: Subscription | undefined;
+  private userJoinUnsub: Subscription | undefined;
+  private userLeaveUnsub: Subscription | undefined;
+
   constructor(private registerService: RegisterService) {}
 
+  //Online Users
+
   @Selector()
-  static onlineClients(state: ChatStateModel): number{
+  static onlineClientsAmount(state: ChatStateModel): number{
     return state.onlineUsers;
   }
 
@@ -55,36 +65,66 @@ export class ChatState {
     ctx.setState(newState);
   }
 
+  //Users
 
+  @Selector()
+  static onlineClients(state: ChatStateModel): User[]{
+    return state.chatClients;
+  }
 
-  // @Selector()
-  // static Clients(state: ChatStateModel): User[] {
-  //   return state.chatClients;
-  // }
-  //
-  // @Selector()
-  // static ClientsOnline(state: ChatStateModel): number {
-  //   return state.onlineUsers;
-  // }
-  //
-  // @Action(GetClients)
-  // GetClients(ctx: StateContext<ChatStateModel>) {
-  //   const state = ctx.getState();
-  //   const newState: ChatStateModel = {
-  //     ...state,
-  //     chatClients: [{id: '22', username: 'Anders', room: 'room1'}]
-  //   };
-  //   ctx.setState(newState);
-  // }
+  @Action(ListenForRegisterAndUnregister)
+  listenForRegisterAndUnregister(ctx: StateContext<ChatStateModel>): void{
 
-  // @Action(GetClients)
-  // GetOnlineClients(ctx: StateContext<ChatStateModel>) {
-  //   const state = ctx.getState();
-  //   const newState: ChatStateModel = {
-  //     ...state,
-  //     onlineUsers: 0
-  //   };
-  //   ctx.setState(newState);
-  // }
+    this.userJoinUnsub = this.registerService.listenForRegister()
+      .subscribe(user => {ctx.dispatch(new UpdateUserRegister(user));})
+
+    this.userLeaveUnsub = this.registerService.listenForUnregister()
+      .subscribe(user => {ctx.dispatch(new UpdateUserUnregister(user));})
+  }
+
+  @Action(StopListeningForRegisterAndUnregister)
+  stopListeningForRegisterAndUnregister(ctx: StateContext<ChatStateModel>): void{
+    if(this.userJoinUnsub){this.userJoinUnsub.unsubscribe();}
+    if(this.userLeaveUnsub){this.userLeaveUnsub.unsubscribe();}
+  }
+
+  @Action(UpdateUserRegister)
+  updateUserRegister(ctx: StateContext<ChatStateModel>, uur: UpdateUserRegister): void{
+    const state = ctx.getState();
+    const users: User[] = [...state.chatClients];
+    users.push(uur.user);
+    const newState: ChatStateModel = {...state, chatClients: users};
+    ctx.setState(newState);
+  }
+
+  @Action(UpdateUserUnregister)
+  updateUserUnregister(ctx: StateContext<ChatStateModel>, uuu: UpdateUserUnregister): void{
+    const state = ctx.getState();
+    const users: User[] = [...state.chatClients];
+
+    var index: number = -1;
+
+    for(var i = 0; i < users.length; i++){
+      if(users[i].username === uuu.user.username){index = i; break;}
+    }
+
+    if (index !== -1) {users.splice(index, 1);}
+
+    const newState: ChatStateModel = {...state, chatClients: users};
+    ctx.setState(newState);
+  }
+
+  @Action(GetOnlineUsers)
+  getOnlineUsers(ctx: StateContext<ChatStateModel>, gou: GetOnlineUsers): void{
+    this.registerService.getConnectedUsers(gou.room).subscribe((users) => {
+      ctx.dispatch(new UpdateOnline(users));});
+  }
+
+  @Action(UpdateOnline)
+  updateOnline(ctx: StateContext<ChatStateModel>, onlineAmount: UpdateOnline){
+    const state = ctx.getState();
+    const newState: ChatStateModel = {...state, chatClients: onlineAmount.clients};
+    ctx.setState(newState);
+  }
 
 }

@@ -4,8 +4,15 @@ import {ChatService} from '../shared/chat.service';
 import {RegisterService} from '../../register/shared/register.service';
 import {User} from '../../shared/user';
 import {take, takeUntil} from 'rxjs/operators';
-import {Select} from '@ngxs/store';
+import {Select, Store} from '@ngxs/store';
 import {ChatState} from '../state/chat.state';
+import {
+  GetOnlineAmount,
+  GetOnlineUsers,
+  ListenForOnlineAmount,
+  ListenForRegisterAndUnregister,
+  StopListeningForRegisterAndUnregister
+} from '../state/chat.actions';
 
 @Component({
   selector: 'app-active-users',
@@ -14,35 +21,18 @@ import {ChatState} from '../state/chat.state';
 })
 export class ActiveUsersComponent implements OnInit, OnDestroy {
 
-  connectedUsers: User[] = [];
-  unsubscriber$ = new Subject();
+  @Select(ChatState.onlineClients)
+  clients$: Observable<User[]> | undefined;
 
-  constructor(private chatService: ChatService, private registerService: RegisterService) { }
+  constructor(private chatService: ChatService, private registerService: RegisterService, private store: Store) { }
 
   ngOnInit(): void {
-
-    this.registerService.getConnectedUsers(this.registerService.user.room).subscribe((connectedUsers) => {this.connectedUsers = connectedUsers;});
-
-    this.registerService.listenForRegister().pipe(takeUntil(this.unsubscriber$)).subscribe((user) => {
-      this.connectedUsers.push(user);
-    })
-
-    this.registerService.listenForUnregister().pipe(takeUntil(this.unsubscriber$)).subscribe((user) => {
-
-      var index: number = -1;
-
-      for(var i = 0; i < this.connectedUsers.length; i++){
-        if(this.connectedUsers[i].username === user.username){index = i; break;}
-      }
-
-      if (index !== -1) {this.connectedUsers.splice(index, 1);}
-    })
-
+    this.store.dispatch(new ListenForRegisterAndUnregister());
+    this.store.dispatch(new GetOnlineUsers(this.registerService.user.room));
   }
 
   ngOnDestroy(): void {
-    this.unsubscriber$.next();
-    this.unsubscriber$.complete();
+    this.store.dispatch(new StopListeningForRegisterAndUnregister());
   }
 
 }

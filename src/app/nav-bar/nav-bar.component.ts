@@ -14,17 +14,14 @@ import {GetOnlineAmount, ListenForOnlineAmount, StopListeningForOnlineAmount} fr
 })
 export class NavBarComponent implements OnInit, OnDestroy {
 
-  // onlineUsers: number = 0;
   unsubscriber$ = new Subject();
 
-  @Select(ChatState.onlineClients)
+  @Select(ChatState.onlineClientsAmount)
   clients$: Observable<number> | undefined;
 
   constructor(private registerService: RegisterService, private chatService: ChatService, private store: Store) { }
 
   ngOnInit(): void {
-    // this.registerService.getConnectedUsersAmount().subscribe((data) => {this.onlineUsers = data;});
-    // this.registerService.listenForOnlineAmount().pipe(takeUntil(this.unsubscriber$)).subscribe((data) => {this.onlineUsers = data;})
     this.store.dispatch(new ListenForOnlineAmount());
     this.store.dispatch(new GetOnlineAmount());
 

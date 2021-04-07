@@ -1,8 +1,8 @@
 <div>
-  <h6 align="center">Active chatters ({{connectedUsers.length}})</h6>
+  <h6 align="center">Active chatters ({{(clients$ | async).length}})</h6>
 
   <ul>
-    <li *ngFor="let user of connectedUsers">
+    <li *ngFor="let user of (clients$ | async)">
       <p>{{user.username}}</p>
     </li>
   </ul>
