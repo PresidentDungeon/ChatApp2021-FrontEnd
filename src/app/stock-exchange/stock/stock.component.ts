@@ -1,4 +1,4 @@
-import {Component, LOCALE_ID, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {StockService} from '../shared/stock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -108,7 +108,7 @@ export class StockComponent implements OnInit, OnDestroy {
     subscribe( () => {
       this.getStock(); this.stockDailyUpdate = true;
       if(this.selectedStock){
-        this.stockService.getStockByID(this.selectedStock.id).subscribe((stock) => {this.selectedStock = stock; this.stockPriceControl.setValue(stock.currentStockPrice)})
+        this.stockService.getStockByID(this.selectedStock.id).subscribe((stock) => {this.selectedStock = stock; this.stockPriceControl.setValue(stock.currentStockPrice);})
       }})
 
   }

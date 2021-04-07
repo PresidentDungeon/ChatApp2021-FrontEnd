@@ -94,7 +94,7 @@
                     <input type="number" class="form-control" [formControl]="stockPriceControl" id="stockPriceUpdateTextarea" placeholder="Enter stock price" min="0" max="99999" autocomplete="off">
                     <button class="btn btn-outline-success confirmButton" type="submit" [disabled]="!stockPriceControl.valid || stockPriceControl.value == selectedStock.currentStockPrice" style="margin-left: 10px" (click)="updateStockMainWindow()"><fa-icon [icon]="accept"></fa-icon></button>
                   </div>
-                  <p style="font-size: 12px; color: blue; margin-bottom: 0px">Initial value ({{selectedStock.dailyTimestamp | date:'dd-MM-yyyy' : '-1'}}) = {{selectedStock.dailyStockPrice | currency: 'DKK '}}</p>
+                  <p style="font-size: 12px; color: blue; margin-bottom: 0px">Initial value ({{selectedStock.dailyTimestamp | date:'dd-MM-yyyy HH:mm:ss' : '+1'}}) = {{selectedStock.dailyStockPrice | currency: 'DKK '}}</p>
                   <h6 *ngIf="!stockPriceControl.valid" style="">Enter a valid price between 0-99999</h6>
                 </div>
               </div>
