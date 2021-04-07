@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {User} from '../../shared/user';
-import {ListenForOnlineAmount, StopListeningForOnlineAmount, UpdateOnlineAmount} from './chat.actions';
+import {GetOnlineAmount, ListenForOnlineAmount, StopListeningForOnlineAmount, UpdateOnlineAmount} from './chat.actions';
 import {Subscription} from 'rxjs';
 import {RegisterService} from '../../register/shared/register.service';
 
@@ -41,6 +41,11 @@ export class ChatState {
   @Action(StopListeningForOnlineAmount)
   stopListeningForOnlineAmount(ctx: StateContext<ChatStateModel>): void{
     if(this.clientsOnlineUnsub){this.clientsOnlineUnsub.unsubscribe();}
+  }
+
+  @Action(GetOnlineAmount)
+  getOnlineAmount(ctx: StateContext<ChatStateModel>): void{
+    this.registerService.getConnectedUsersAmount().subscribe((amount) => {ctx.dispatch(new UpdateOnlineAmount(amount));});
   }
 
   @Action(UpdateOnlineAmount)

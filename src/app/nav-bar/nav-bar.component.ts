@@ -5,7 +5,7 @@ import {takeUntil} from 'rxjs/operators';
 import {ChatService} from '../chat/shared/chat.service';
 import {Select, Store} from '@ngxs/store';
 import {ChatState} from '../chat/state/chat.state';
-import {ListenForOnlineAmount, StopListeningForOnlineAmount} from '../chat/state/chat.actions';
+import {GetOnlineAmount, ListenForOnlineAmount, StopListeningForOnlineAmount} from '../chat/state/chat.actions';
 
 @Component({
   selector: 'app-nav-bar',
@@ -26,6 +26,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // this.registerService.getConnectedUsersAmount().subscribe((data) => {this.onlineUsers = data;});
     // this.registerService.listenForOnlineAmount().pipe(takeUntil(this.unsubscriber$)).subscribe((data) => {this.onlineUsers = data;})
     this.store.dispatch(new ListenForOnlineAmount());
+    this.store.dispatch(new GetOnlineAmount());
 
     this.chatService.listenForMessages().pipe(takeUntil(this.unsubscriber$)).subscribe((message) => {
       if(!this.chatService.isOnActiveChat && this.registerService.isRegistered && !message.isSystemInfo){this.chatService.newMessages++;}
