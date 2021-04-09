@@ -1,13 +1,15 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {StockService} from '../shared/stock.service';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {Stock} from '../shared/stock';
 import {faCheck, faChevronCircleLeft} from '@fortawesome/free-solid-svg-icons';
-import {Filter} from '../../shared/filter';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {Location} from '@angular/common';
+import {Select, Store} from '@ngxs/store';
+import {StockState} from '../state/stock.state';
+import {GetStocks, UpdateError} from '../state/stock.actions';
 
 @Component({
   selector: 'app-stock',
@@ -34,12 +36,17 @@ export class StockComponent implements OnInit, OnDestroy {
 
   stockPriceControl = new FormControl('', [Validators.required, Validators.min(0), Validators.max(99999)])
 
-  stock: Stock[];
-  loading: boolean = true;
-  error: string = '';
+  @Select(StockState.stocks)
+  stocks$: Observable<Stock[]> | undefined;
+
+  @Select(StockState.loading)
+  loading$: Observable<boolean> | undefined;
+  @Select(StockState.error)
+  error$: Observable<string> | undefined;
   unsubscriber$ = new Subject();
 
-  totalItems: number;
+  @Select(StockState.totalItems)
+  totalItems$: Observable<number> | undefined;
   currentPage: number = 1;
   itemsPrPage: number = 10;
   smallNumPages: number = 0;
@@ -59,7 +66,7 @@ export class StockComponent implements OnInit, OnDestroy {
 
 
   constructor(private stockService: StockService, private modalService: BsModalService,
-              private location: Location) { }
+              private location: Location, private store: Store) { }
 
   ngOnInit(): void {
 
@@ -76,8 +83,8 @@ export class StockComponent implements OnInit, OnDestroy {
     subscribe((data: any) => {
 
       if(this.stockUpdateFromMain){
-        if(data.updated){this.error = '';}
-        else{this.error = data.errorMessage;}
+        if(data.updated){this.store.dispatch(new UpdateError(''));}
+        else{this.store.dispatch(new UpdateError(data.error()));}
         this.stockUpdateFromMain = false;
       }
       else{
@@ -123,11 +130,7 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   getStock(){
-    const filter: Filter = {currentPage: this.currentPage, itemsPrPage: this.itemsPrPage}
-    this.stockService.getStock(filter).subscribe((FilterList) => {
-      this.totalItems = FilterList.totalItems;
-      this.stock = FilterList.list;
-    }, error => {this.error = error.error}, () => {this.loading = false; });
+    this.store.dispatch(new GetStocks(this.currentPage, this.itemsPrPage));
   }
 
   selectStock(stock: Stock){
@@ -202,9 +205,11 @@ export class StockComponent implements OnInit, OnDestroy {
   }
 
   itemsPrPageUpdate(): void{
-    this.smallNumPages = Math.ceil(this.totalItems / this.itemsPrPage);
-    this.currentPage = 1;
-    this.getStock();
+    this.totalItems$.pipe(take(1)).subscribe((totalItems) => {
+      this.smallNumPages = Math.ceil(totalItems / this.itemsPrPage);
+      this.currentPage = 1;
+      this.getStock();
+    })
   }
 
   pageChanged($event: any): void {

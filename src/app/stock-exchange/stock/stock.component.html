@@ -3,9 +3,9 @@
 
 
 
-  <progressbar class="progress center-block" *ngIf="loading" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
-  <div class="container" *ngIf="!loading">
-    <h6 id="errorMsg" align="center">{{error}}</h6>
+  <progressbar class="progress center-block" *ngIf="loading$|async" max="100" [value]="100" type="success" [striped]="true" [animate]="true">Loading...</progressbar>
+  <div class="container" *ngIf="!(loading$|async)">
+    <h6 id="errorMsg" align="center">{{error$|async}}</h6>
 
     <div class="row">
       <label class="col-md-2" id="listingSelect">
@@ -69,7 +69,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="data" *ngFor="let stockItem of stock" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
+            <tr class="data" *ngFor="let stockItem of stocks$|async" (click)="selectStock(stockItem)" [class.selected]="stockItem.id === selectedStock?.id">
               <td>{{stockItem.name}}</td>
               <td *ngIf="+stockItem.currentStockPrice === +stockItem.dailyStockPrice" style="color: black">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
               <td *ngIf="+stockItem.currentStockPrice > +stockItem.dailyStockPrice" style="color: green">{{stockItem.currentStockPrice | currency: 'DKK '}}</td>
@@ -119,7 +119,7 @@
         <pagination
           [maxSize]="5"
           [directionLinks]="false"
-          [totalItems]="totalItems"
+          [totalItems]="totalItems$|async"
           [(ngModel)]="currentPage"
           (pageChanged)="pageChanged($event)"
           [itemsPerPage]="itemsPrPage"
@@ -129,7 +129,7 @@
 
       <div id="paging" class="row">
         <pager
-          [totalItems]="totalItems"
+          [totalItems]="totalItems$|async"
           [(ngModel)]="currentPage"
           (pageChanged)="pageChanged($event)"
           pageBtnClass="btn"

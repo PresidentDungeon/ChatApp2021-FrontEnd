@@ -7,6 +7,9 @@ import {FormsModule} from '@angular/forms';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import {NgxsModule} from '@ngxs/store';
+import {ChatState} from '../chat/state/chat.state';
+import {StockState} from './state/stock.state';
 
 
 @NgModule({
@@ -18,7 +21,8 @@ import { AlertModule } from 'ngx-bootstrap/alert';
     FormsModule,
     PaginationModule.forRoot(),
     ModalModule.forRoot(),
-    AlertModule.forRoot()
+    AlertModule.forRoot(),
+    NgxsModule.forFeature([StockState])
 
 
   ]
