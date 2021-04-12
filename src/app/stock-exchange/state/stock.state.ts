@@ -2,18 +2,30 @@ import {Stock} from '../shared/stock';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {ChatStateModel} from '../../chat/state/chat.state';
 import {Injectable} from '@angular/core';
-import {GetOnlineAmount, UpdateOnlineAmount} from '../../chat/state/chat.actions';
-import {GetStocks, UpdateError, UpdateLoading, UpdateStocks} from './stock.actions';
+import {GetOnlineAmount, ListenForOnlineAmount, StopListeningForOnlineAmount, UpdateOnlineAmount} from '../../chat/state/chat.actions';
+import {
+  GetStocks,
+  UpdateCreate,
+  UpdateCreateLoading,
+  UpdateError,
+  UpdateLoading,
+  UpdateStocks
+} from './stock.actions';
 import {RegisterService} from '../../register/shared/register.service';
 import {StockService} from '../shared/stock.service';
 import {Filter} from '../../shared/filter';
+import {Subscription} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 
 export interface StockStateModel{
   stocks: Stock[];
   error: string;
+  createError: string;
   loading: boolean;
+  createStockLoading: boolean;
   totalItems: number;
+  modalRef: boolean;
 }
 
 @State<StockStateModel>({
@@ -21,13 +33,18 @@ export interface StockStateModel{
   defaults: {
     stocks: [],
     error: '',
+    createError: '',
     loading: true,
-    totalItems: 0
+    createStockLoading: false,
+    totalItems: 0,
+    modalRef: false
   }
 })
 
 @Injectable()
 export class StockState {
+
+  private createUnsub: Subscription | undefined;
 
   constructor(private stockService: StockService) {}
 
@@ -47,8 +64,23 @@ export class StockState {
   }
 
   @Selector()
+  static createLoading(state: StockStateModel): boolean{
+    return state.createStockLoading;
+  }
+
+  @Selector()
   static error(state: StockStateModel): string{
     return state.error;
+  }
+
+  @Selector()
+  static createError(state: StockStateModel): string{
+    return state.createError;
+  }
+
+  @Selector()
+  static modalRef(state: StockStateModel): boolean{
+    return state.modalRef;
   }
 
   @Action(GetStocks)
@@ -71,11 +103,27 @@ export class StockState {
     ctx.setState(newState);
   }
 
+  @Action(UpdateCreateLoading)
+  updatecreateLoading(ctx: StateContext<StockStateModel>, ucl: UpdateCreateLoading): void {
+    const state = ctx.getState();
+    const newState: StockStateModel = {...state, createStockLoading: ucl.loading};
+    ctx.setState(newState);
+  }
+
   @Action(UpdateError)
   updateError(ctx: StateContext<StockStateModel>, ue: UpdateError): void {
     const state = ctx.getState();
     const newState: StockStateModel = {...state, error: ue.error};
     ctx.setState(newState);
   }
+
+
+  @Action(UpdateCreate)
+  updateCreate(ctx: StateContext<StockStateModel>, uc: UpdateCreate): void {
+    const state = ctx.getState();
+    const newState: StockStateModel = {...state, createError: uc.error, createStockLoading: false};
+    ctx.setState(newState);
+  }
+
 
 }

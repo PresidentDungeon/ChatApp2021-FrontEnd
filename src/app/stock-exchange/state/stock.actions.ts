@@ -16,7 +16,18 @@ export class UpdateLoading{
   static readonly type = '[Stock] Update Loading'
 }
 
+export class UpdateCreateLoading{
+  constructor(public loading: boolean) {}
+  static readonly type = '[Stock] Update Create Loading'
+}
+
 export class UpdateError{
   constructor(public error: string) {}
   static readonly type = '[Stock] Update Error'
+}
+
+
+export class UpdateCreate{
+  constructor(public error: string) {}
+  static readonly type = '[Stock] Update Delete Error'
 }

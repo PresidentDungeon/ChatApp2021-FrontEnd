@@ -9,7 +9,12 @@ import {take, takeUntil} from 'rxjs/operators';
 import {Location} from '@angular/common';
 import {Select, Store} from '@ngxs/store';
 import {StockState} from '../state/stock.state';
-import {GetStocks, UpdateError} from '../state/stock.actions';
+import {
+  GetStocks,
+  UpdateCreate,
+  UpdateCreateLoading,
+  UpdateError
+} from '../state/stock.actions';
 
 @Component({
   selector: 'app-stock',
@@ -23,7 +28,7 @@ export class StockComponent implements OnInit, OnDestroy {
   selectedStock: Stock;
 
   createForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(16)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(16)]),
     description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(600)]),
     price: new FormControl('', [Validators.required, Validators.min(0), Validators.max(99999)]),
   });
@@ -52,8 +57,10 @@ export class StockComponent implements OnInit, OnDestroy {
   smallNumPages: number = 0;
 
   modalRef: BsModalRef;
-  stockCreateLoading: boolean = false;
-  stockCreateError: string = '';
+  @Select(StockState.createLoading)
+  createLoading$: Observable<boolean> | undefined;
+  @Select(StockState.createError)
+  createError$: Observable<boolean> | undefined;
   stockUpdateLoading: boolean = false;
   stockUpdateError: string = '';
   stockUpdateFromMain: boolean = false;
@@ -64,19 +71,18 @@ export class StockComponent implements OnInit, OnDestroy {
   stockDailyUpdate: boolean = false;
   stockSelectedName: string = ''
 
+  animals$: Observable<boolean>;
 
   constructor(private stockService: StockService, private modalService: BsModalService,
-              private location: Location, private store: Store) { }
+              private location: Location, private store: Store) {
+  }
 
   ngOnInit(): void {
 
-    this.initialLoad();
-
     this.stockService.getCreateResponse().pipe(takeUntil(this.unsubscriber$)).
-      subscribe((data: any) => {
-        if(data.created){this.modalRef.hide(); this.stockCreateError = ''; this.createForm.reset();}
-        else{this.stockCreateError = data.errorMessage;}
-      this.stockCreateLoading = false;
+    subscribe((data: any) => {
+      if(data.created){this.modalRef.hide(); this.createForm.reset(); this.store.dispatch(new UpdateCreate(''));}
+      else{this.store.dispatch(new UpdateCreate(data.errorMessage));}
     })
 
     this.stockService.getUpdateResponse().pipe(takeUntil(this.unsubscriber$)).
@@ -118,11 +124,13 @@ export class StockComponent implements OnInit, OnDestroy {
         this.stockService.getStockByID(this.selectedStock.id).subscribe((stock) => {this.selectedStock = stock; this.stockPriceControl.setValue(stock.currentStockPrice);})
       }})
 
+    this.initialLoad();
+
   }
 
   ngOnDestroy(): void {
     this.unsubscriber$.next();
-    this.unsubscriber$.complete();
+    this.unsubscriber$.complete()
   }
 
   initialLoad(): void{
@@ -142,7 +150,8 @@ export class StockComponent implements OnInit, OnDestroy {
 
   createStock(): void{
 
-    this.stockCreateLoading = true;
+    this.store.dispatch(new UpdateCreateLoading(true));
+
     const stockData = this.createForm.value;
 
     const stock: Stock = {

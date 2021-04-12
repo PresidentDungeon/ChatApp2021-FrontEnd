@@ -154,7 +154,7 @@
   </div>
 
   <div class="createView modal-body">
-    <h6 align="center">{{stockCreateError}}</h6>
+    <h6 align="center">{{createError$|async}}</h6>
     <form [formGroup]="createForm" (ngSubmit)="createStock()">
 
       <div class="form-group">
@@ -190,11 +190,11 @@
         </div>
       </div>
 
-      <progressbar class="progress" *ngIf="stockCreateLoading" max="100" [value]="100" type="success" [striped]="true" [animate]="true" style="margin-bottom: 10px">Loading...</progressbar>
+      <progressbar class="progress" *ngIf="((createLoading$|async))" max="100" [value]="100" type="success" [striped]="true" [animate]="true" style="margin-bottom: 10px">Loading...</progressbar>
 
       <div class="col text-center">
         <button (click)="modalRef.hide();" type="button" class="btn btn-secondary cancelButton" >Cancel</button>
-        <button class="btn btn-success confirmButton" type="submit" [disabled]="!createForm.valid || stockCreateLoading">Create</button>
+        <button class="btn btn-success confirmButton" type="submit" [disabled]="!createForm.valid || (createLoading$|async)">Create</button>
       </div>
 
     </form>
