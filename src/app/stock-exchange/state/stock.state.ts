@@ -25,7 +25,6 @@ export interface StockStateModel{
   loading: boolean;
   createStockLoading: boolean;
   totalItems: number;
-  modalRef: boolean;
 }
 
 @State<StockStateModel>({
@@ -36,15 +35,12 @@ export interface StockStateModel{
     createError: '',
     loading: true,
     createStockLoading: false,
-    totalItems: 0,
-    modalRef: false
+    totalItems: 0
   }
 })
 
 @Injectable()
 export class StockState {
-
-  private createUnsub: Subscription | undefined;
 
   constructor(private stockService: StockService) {}
 
@@ -78,11 +74,6 @@ export class StockState {
     return state.createError;
   }
 
-  @Selector()
-  static modalRef(state: StockStateModel): boolean{
-    return state.modalRef;
-  }
-
   @Action(GetStocks)
   getStocks(ctx: StateContext<StockStateModel>, gs: GetStocks): void{
     const filter: Filter = {currentPage: gs.currentPage, itemsPrPage: gs.itemsPrPage}
@@ -104,7 +95,7 @@ export class StockState {
   }
 
   @Action(UpdateCreateLoading)
-  updatecreateLoading(ctx: StateContext<StockStateModel>, ucl: UpdateCreateLoading): void {
+  updateCreateLoading(ctx: StateContext<StockStateModel>, ucl: UpdateCreateLoading): void {
     const state = ctx.getState();
     const newState: StockStateModel = {...state, createStockLoading: ucl.loading};
     ctx.setState(newState);

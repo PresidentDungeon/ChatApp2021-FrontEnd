@@ -71,8 +71,6 @@ export class StockComponent implements OnInit, OnDestroy {
   stockDailyUpdate: boolean = false;
   stockSelectedName: string = ''
 
-  animals$: Observable<boolean>;
-
   constructor(private stockService: StockService, private modalService: BsModalService,
               private location: Location, private store: Store) {
   }
