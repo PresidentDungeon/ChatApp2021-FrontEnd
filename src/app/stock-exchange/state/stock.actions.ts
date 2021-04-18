@@ -26,8 +26,26 @@ export class UpdateError{
   static readonly type = '[Stock] Update Error'
 }
 
-
 export class UpdateCreate{
   constructor(public error: string) {}
   static readonly type = '[Stock] Update Delete Error'
+}
+
+
+
+
+
+export class ListenForStockCreateResponse{
+  constructor() {}
+  static readonly type = '[Stock] Start Listening For Stock Create Response'
+}
+
+export class StopListeningForStockCreateResponse{
+  constructor() {}
+  static readonly type = '[Stock] Stop Listening For Stock Create Response'
+}
+
+export class CreateStock{
+  constructor(public stock: Stock) {}
+  static readonly type = '[Stock] Create Stock'
 }

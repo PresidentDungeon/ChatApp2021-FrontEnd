@@ -1,21 +1,19 @@
 import {Stock} from '../shared/stock';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {ChatStateModel} from '../../chat/state/chat.state';
 import {Injectable} from '@angular/core';
-import {GetOnlineAmount, ListenForOnlineAmount, StopListeningForOnlineAmount, UpdateOnlineAmount} from '../../chat/state/chat.actions';
 import {
+  CreateStock,
   GetStocks,
+  ListenForStockCreateResponse, StopListeningForStockCreateResponse,
   UpdateCreate,
   UpdateCreateLoading,
   UpdateError,
   UpdateLoading,
   UpdateStocks
 } from './stock.actions';
-import {RegisterService} from '../../register/shared/register.service';
 import {StockService} from '../shared/stock.service';
 import {Filter} from '../../shared/filter';
 import {Subscription} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
 
 
 export interface StockStateModel{
@@ -41,6 +39,8 @@ export interface StockStateModel{
 
 @Injectable()
 export class StockState {
+
+  private stockCreateUnsub: Subscription | undefined;
 
   constructor(private stockService: StockService) {}
 
@@ -108,6 +108,29 @@ export class StockState {
     ctx.setState(newState);
   }
 
+
+
+
+
+
+
+  @Action(ListenForStockCreateResponse)
+  listenForStockCreateResponse(ctx: StateContext<StockStateModel>){
+    this.stockCreateUnsub = this.stockService.getCreateResponse().
+    subscribe((data: any) => {if(data.created){ctx.dispatch(new UpdateCreate(''));}
+      else{ctx.dispatch(new UpdateCreate(data.errorMessage));}
+    })
+  }
+
+  @Action(StopListeningForStockCreateResponse)
+  stopListeningForStockCreateResponse(ctx: StateContext<StockStateModel>){
+    if(this.stockCreateUnsub){this.stockCreateUnsub.unsubscribe();}
+  }
+
+  @Action(CreateStock)
+  createStock(ctx: StateContext<StockStateModel>, cs: CreateStock){
+    this.stockService.createStock(cs.stock);
+  }
 
   @Action(UpdateCreate)
   updateCreate(ctx: StateContext<StockStateModel>, uc: UpdateCreate): void {

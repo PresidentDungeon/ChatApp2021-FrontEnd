@@ -160,11 +160,11 @@
       <div class="form-group">
         <div class="col text-center">
           <label for="name">Stock name</label>
-          <input type="text" class="form-control" formControlName="name" id="name" placeholder="Enter stock name" minlength="1" maxlength="16" pattern="^(?!.* {2})(?=\S)(?=.*\S$)[a-zA-Z æøåÆØÅ0-9 ]+$">
+          <input type="text" class="form-control" formControlName="name" id="name" placeholder="Enter stock name" minlength="2" maxlength="16" pattern="^(?!.* {2})(?=\S)(?=.*\S$)[a-zA-Z æøåÆØÅ0-9 ]+$">
         </div>
 
         <div class="col text-center">
-          <h6 *ngIf="createForm.get('name').invalid && createForm.get('name').dirty">Stock name must be between 0-16 characters with no whitespace</h6>
+          <h6 *ngIf="createForm.get('name').invalid && createForm.get('name').dirty">Stock name must be between 2-16 characters with no whitespace</h6>
         </div>
       </div>
 

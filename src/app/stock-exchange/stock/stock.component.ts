@@ -10,7 +10,10 @@ import {Location} from '@angular/common';
 import {Select, Store} from '@ngxs/store';
 import {StockState} from '../state/stock.state';
 import {
+  CreateStock,
   GetStocks,
+  ListenForStockCreateResponse,
+  StopListeningForStockCreateResponse,
   UpdateCreate,
   UpdateCreateLoading,
   UpdateError
@@ -43,7 +46,6 @@ export class StockComponent implements OnInit, OnDestroy {
 
   @Select(StockState.stocks)
   stocks$: Observable<Stock[]> | undefined;
-
   @Select(StockState.loading)
   loading$: Observable<boolean> | undefined;
   @Select(StockState.error)
@@ -77,11 +79,13 @@ export class StockComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.stockService.getCreateResponse().pipe(takeUntil(this.unsubscriber$)).
-    subscribe((data: any) => {
-      if(data.created){this.modalRef.hide(); this.createForm.reset(); this.store.dispatch(new UpdateCreate(''));}
-      else{this.store.dispatch(new UpdateCreate(data.errorMessage));}
-    })
+    this.store.dispatch(new ListenForStockCreateResponse());
+
+    // this.stockService.getCreateResponse().pipe(takeUntil(this.unsubscriber$)).
+    // subscribe((data: any) => {
+    //   if(data.created){this.modalRef.hide(); this.createForm.reset(); this.store.dispatch(new UpdateCreate(''));}
+    //   else{this.store.dispatch(new UpdateCreate(data.errorMessage));}
+    // })
 
     this.stockService.getUpdateResponse().pipe(takeUntil(this.unsubscriber$)).
     subscribe((data: any) => {
@@ -128,7 +132,8 @@ export class StockComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.unsubscriber$.next();
-    this.unsubscriber$.complete()
+    this.unsubscriber$.complete();
+    this.store.dispatch(new StopListeningForStockCreateResponse());
   }
 
   initialLoad(): void{
@@ -161,7 +166,8 @@ export class StockComponent implements OnInit, OnDestroy {
       dailyTimestamp: new Date()
     }
 
-    this.stockService.createStock(stock);
+    // this.stockService.createStock(stock);
+    this.store.dispatch(new CreateStock(stock));
   }
 
   updateStock(): void{

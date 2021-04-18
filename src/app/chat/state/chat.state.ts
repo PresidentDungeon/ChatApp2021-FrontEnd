@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {User} from '../../shared/user';
-import {
-  GetOnlineAmount, GetOnlineUsers,
-  ListenForOnlineAmount,
+import {GetOnlineAmount, GetOnlineUsers, ListenForOnlineAmount,
   ListenForRegisterAndUnregister,
   StopListeningForOnlineAmount, StopListeningForRegisterAndUnregister, UpdateOnline,
   UpdateOnlineAmount, UpdateUserRegister, UpdateUserUnregister
