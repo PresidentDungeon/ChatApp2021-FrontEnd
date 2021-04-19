@@ -23,7 +23,7 @@ import {NgxsLoggerPluginModule} from '@ngxs/logger-plugin';
     AppRoutingModule,
     SocketIoModule.forRoot({url: ''}),
     FontAwesomeModule,
-    NgxsModule.forRoot([ChatState], {
+    NgxsModule.forRoot([], {
       developmentMode: !environment.production
     }),
     // NgxsLoggerPluginModule.forRoot()
